@@ -42,9 +42,14 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   width: 240px; background: #1a1a2e; color: white;
   padding: 24px 0; flex-shrink: 0;
 }
-.sidebar-logo { padding: 0 24px 24px; border-bottom: 1px solid #ffffff15; }
+.sidebar-logo {
+  padding: 16px 24px 20px; border-bottom: 1px solid #ffffff15;
+  background: white; text-align: center;
+}
 .sidebar-logo h2 { font-size: 18px; color: #60a5fa; }
-.sidebar-logo p { font-size: 11px; color: #888; margin-top: 2px; }
+.sidebar-logo p {
+  font-size: 13px; color: #1a569a; margin-top: 8px; font-weight: 700;
+}
 .nav-item {
   padding: 12px 24px; cursor: pointer; font-size: 14px;
   color: #aaa; transition: all 0.15s; display: flex; align-items: center; gap: 10px;
@@ -122,7 +127,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 <div id="login-page">
   <div class="login-wrap">
     <div class="login-box">
-           <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:200px;margin-bottom:12px" alt="eMart IT"><br>
+      <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:200px;margin-bottom:12px" alt="eMart IT"><br>
       <h1 style="display:none">eMart IT</h1>
       <p>Client Dashboard — Sign in to manage your chatbot</p>
       <div class="form-group">
@@ -144,8 +149,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   <div class="dashboard">
     <div class="sidebar">
       <div class="sidebar-logo">
-
-        <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:140px; margin-bottom:4px;">
+        <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:160px;" alt="eMart IT">
         <p id="biz-name-sidebar">Loading...</p>
       </div>
       <div class="nav-item active" onclick="showPage('overview')">📊 <span>Overview</span></div>
@@ -322,7 +326,6 @@ function showPage(page) {
   document.getElementById('page-' + page).classList.remove('hidden');
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   event.currentTarget.classList.add('active');
-
   if (page === 'embed') showEmbed();
 }
 
@@ -434,7 +437,6 @@ function doLogout() {
   document.getElementById('login-page').classList.remove('hidden');
 }
 
-// Auto-login if saved
 const savedId = localStorage.getItem('emartit_client_id');
 const savedClient = localStorage.getItem('emartit_client');
 if (savedId && savedClient) {
