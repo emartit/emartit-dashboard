@@ -382,6 +382,34 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
               <input type="text" id="b-bubble-color-text" value="#1a569a" oninput="syncColorFromText('b-bubble-color', 'b-bubble-color-text')">
             </div>
           </div>
+
+        <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
+
+          <!-- CUSTOM AVATAR UPLOAD -->
+          <div style="margin-bottom:16px;padding:16px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
+            <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:8px">Upload Custom Logo / Photo</div>
+            <div style="font-size:12px;color:#64748b;margin-bottom:12px">Upload your company logo or photo. This will replace the emoji avatar below.</div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <div id="avatar-preview-wrap" style="width:60px;height:60px;border-radius:50%;background:#e8f0fb;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;border:2px solid #1a569a;flex-shrink:0">
+                <span id="avatar-preview-emoji">🤖</span>
+                <img id="avatar-preview-img" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+              </div>
+              <div style="flex:1">
+                <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+                <button onclick="document.getElementById('avatar-file-input').click()"
+                  style="padding:8px 16px;background:#1a569a;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-right:8px">
+                  📷 Choose Image
+                </button>
+                <button onclick="removeCustomAvatar()" id="remove-avatar-btn" style="display:none;padding:8px 16px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">
+                  ✕ Remove
+                </button>
+                <div style="font-size:11px;color:#94a3b8;margin-top:6px">JPG, PNG or GIF. Max 2MB. Will be cropped to circle.</div>
+              </div>
+            </div>
+            <div id="avatar-upload-status" style="font-size:12px;margin-top:8px;display:none"></div>
+          </div>
+
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:8px">Or choose an emoji avatar:</div>
           <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
           <div class="avatar-grid">
             <div class="avatar-option selected" data-avatar="robot" onclick="selectAvatar(this)">🤖</div>
@@ -732,6 +760,83 @@ function syncColorFromText(colorId, textId) {
   if (/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById(colorId).value = val; updateBrandPreview(); }
 }
 
+  // ============ CUSTOM AVATAR UPLOAD ============
+var customAvatarUrl = '';
+
+function handleAvatarUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image must be under 2MB');
+    return;
+  }
+  const statusEl = document.getElementById('avatar-upload-status');
+  statusEl.style.display = 'block';
+  statusEl.style.color = '#64748b';
+  statusEl.textContent = '⏳ Uploading...';
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const base64 = e.target.result;
+    try {
+      const res = await fetch(API + '/clients/upload-avatar?client_id=' + currentClientId, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          image_data: base64,
+          file_name: file.name,
+          content_type: file.type
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        customAvatarUrl = data.url;
+        showAvatarPreview(base64, true);
+        statusEl.style.color = '#166534';
+        statusEl.textContent = '✅ Avatar uploaded successfully!';
+        document.getElementById('remove-avatar-btn').style.display = 'inline-block';
+        // Deselect emoji avatars
+        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+      } else {
+        statusEl.style.color = '#dc2626';
+        statusEl.textContent = '❌ Upload failed. Please try again.';
+      }
+    } catch(e) {
+      statusEl.style.color = '#dc2626';
+      statusEl.textContent = '❌ Error: ' + e.message;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function showAvatarPreview(src, isCustom) {
+  const emojiEl = document.getElementById('avatar-preview-emoji');
+  const imgEl = document.getElementById('avatar-preview-img');
+  if (isCustom && src) {
+    emojiEl.style.display = 'none';
+    imgEl.style.display = 'block';
+    imgEl.src = src;
+  } else {
+    emojiEl.style.display = 'block';
+    imgEl.style.display = 'none';
+  }
+}
+
+function removeCustomAvatar() {
+  customAvatarUrl = '';
+  document.getElementById('avatar-preview-emoji').style.display = 'block';
+  document.getElementById('avatar-preview-img').style.display = 'none';
+  document.getElementById('avatar-preview-img').src = '';
+  document.getElementById('remove-avatar-btn').style.display = 'none';
+  document.getElementById('avatar-upload-status').style.display = 'none';
+  document.getElementById('avatar-file-input').value = '';
+  // Re-select first emoji
+  const firstAvatar = document.querySelector('.avatar-option');
+  if (firstAvatar) {
+    firstAvatar.classList.add('selected');
+    currentBranding.avatar = firstAvatar.dataset.avatar;
+  }
+}
+  
 function selectAvatar(el) {
   document.querySelectorAll('.avatar-option').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
