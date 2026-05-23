@@ -10,7 +10,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 
 .hidden { display: none !important; }
 
-/* LOGIN */
 .login-wrap {
   min-height: 100vh; display: flex; align-items: center;
   justify-content: center; background: linear-gradient(135deg, #1a569a, #2e75b6);
@@ -35,7 +34,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .btn:hover { background: #154a85; }
 .error-msg { color: #c73e1d; font-size: 12px; margin-top: 10px; text-align: center; }
 
-/* DASHBOARD */
 .dashboard { display: flex; min-height: 100vh; }
 .sidebar {
   width: 240px; background: #1a1a2e; color: white;
@@ -92,7 +90,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
 }
 
-/* COLOR PICKER */
 .color-row { display: flex; align-items: center; gap: 12px; }
 .color-row input[type="color"] {
   width: 48px; height: 40px; border: 1.5px solid #dde3ec;
@@ -100,7 +97,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 }
 .color-row input[type="text"] { flex: 1; }
 
-/* AVATAR GRID */
 .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px; }
 .avatar-option {
   border: 2px solid #e0e8f0; border-radius: 10px; padding: 10px;
@@ -109,7 +105,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .avatar-option:hover { border-color: #1a569a; background: #e8f0fb; }
 .avatar-option.selected { border-color: #1a569a; background: #e8f0fb; }
 
-/* POSITION SELECTOR */
 .position-row { display: flex; gap: 12px; margin-top: 8px; }
 .position-option {
   flex: 1; border: 2px solid #e0e8f0; border-radius: 10px; padding: 12px;
@@ -119,7 +114,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .position-option:hover { border-color: #1a569a; }
 .position-option.selected { border-color: #1a569a; background: #e8f0fb; color: #1a569a; }
 
-/* CHAT PREVIEW */
 .chat-preview-wrap { border: 1.5px solid #e0e8f0; border-radius: 10px; overflow: hidden; }
 .chat-header-preview { color: white; padding: 12px 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
 .chat-messages { height: 250px; overflow-y: auto; padding: 16px; background: #f9fbfd; }
@@ -132,7 +126,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .chat-input-row input { flex: 1; padding: 8px 12px; border: 1.5px solid #dde3ec; border-radius: 6px; font-size: 13px; outline: none; }
 .chat-input-row button { padding: 8px 16px; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
 
-/* LIVE PREVIEW WIDGET */
 .widget-preview-wrap { position: relative; height: 120px; background: #f0f4f8; border-radius: 10px; border: 1.5px solid #e0e8f0; overflow: hidden; }
 .widget-bubble-preview {
   position: absolute; bottom: 16px; width: 56px; height: 56px;
@@ -140,31 +133,23 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer;
 }
 
-/* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal-box { background: white; border-radius: 14px; padding: 28px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
 .modal-box h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
 
-/* SETTINGS SECTIONS */
-.settings-section { margin-bottom: 8px; }
 .settings-section-title {
   font-size: 13px; font-weight: 700; color: #1a569a;
   padding: 12px 0 8px; border-bottom: 2px solid #e8f0fb;
   margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-/* WHY SECTION */
 .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-top: 8px; }
-.why-card {
-  background: #f8fafc; border-radius: 10px; padding: 16px;
-  border: 1px solid #e5e7eb; text-align: center;
-}
+.why-card { background: #f8fafc; border-radius: 10px; padding: 16px; border: 1px solid #e5e7eb; text-align: center; }
 .why-card .icon { font-size: 28px; margin-bottom: 8px; }
 .why-card h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
 .why-card p { font-size: 12px; color: #64748b; line-height: 1.5; }
 
-/* CHECKLIST */
 .checklist { list-style: none; }
 .checklist li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #374151; }
 .checklist li:last-child { border-bottom: none; }
@@ -176,7 +161,8 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   .sidebar { width: 60px; }
   .sidebar-logo, .nav-item span { display: none; }
 }
-  /* ANIMATIONS */
+
+/* ANIMATIONS */
 @keyframes pulse {
   0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,86,154,0.4); }
   70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(26,86,154,0); }
@@ -195,14 +181,13 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   50% { box-shadow: 0 0 20px rgba(245,158,11,0.9), 0 0 40px rgba(245,158,11,0.4); }
 }
 @keyframes countdown-pulse {
-  0%, 100% { color: inherit; }
-  50% { opacity: 0.7; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
-.trial-animate { animation: slide-in 0.5s ease-out, blink-border 2s infinite 1s; }
+.trial-animate { animation: slide-in 0.5s ease-out; }
 .upgrade-btn-animate { animation: pulse 2s infinite; display: inline-block; }
 .sidebar-upgrade-animate { animation: glow 2s infinite; border-radius: 8px; }
-.countdown-animate { animation: countdown-pulse 1s infinite; }
-  
+.countdown-animate { animation: countdown-pulse 1.5s infinite; }
 </style>
 </head>
 <body>
@@ -258,10 +243,8 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         <div class="page-title">Welcome back! 👋</div>
         <div class="page-sub" id="welcome-sub">Managing your chatbot</div>
 
-        <!-- TRIAL BANNER -->
         <div id="trial-banner" style="display:none;margin-bottom:20px"></div>
 
-        <!-- PASSWORD WARNING -->
         <div id="password-warning" style="display:none;background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
             <div style="font-size:20px">⚠️</div>
@@ -276,7 +259,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
           </div>
         </div>
 
-        <!-- STATS -->
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-num" id="stat-convos">—</div>
@@ -292,19 +274,17 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
           </div>
         </div>
 
-        <!-- SETUP CHECKLIST -->
         <div class="card">
           <h3>🚀 Quick Setup Checklist</h3>
-          <ul class="checklist" id="setup-checklist">
+          <ul class="checklist">
             <li><span class="check-icon check-done">✓</span> Account created & logged in</li>
-            <li id="check-settings"><span class="check-icon check-todo">2</span> Fill in your business info in Bot Settings</li>
-            <li id="check-branding"><span class="check-icon check-todo">3</span> Customize your chatbot colors in Branding</li>
-            <li id="check-preview"><span class="check-icon check-todo">4</span> Test your chatbot in Chat Preview</li>
-            <li id="check-embed"><span class="check-icon check-todo">5</span> Copy and install your Embed Code on your website</li>
+            <li><span class="check-icon check-todo">2</span> Fill in your business info in Bot Settings</li>
+            <li><span class="check-icon check-todo">3</span> Customize your chatbot colors in Branding</li>
+            <li><span class="check-icon check-todo">4</span> Test your chatbot in Chat Preview</li>
+            <li><span class="check-icon check-todo">5</span> Copy and install your Embed Code on your website</li>
           </ul>
         </div>
 
-        <!-- VIDEO TUTORIAL -->
         <div class="card">
           <h3>🎬 How To Set Up Your Chatbot</h3>
           <p style="font-size:13px;color:#555;margin-bottom:16px">Watch this short video to learn how to set up and install your AI chatbot in minutes.</p>
@@ -320,44 +300,18 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
           </div>
         </div>
 
-        <!-- WHY EMART IT -->
         <div class="card">
           <h3>⭐ Why eMart IT Chatbot?</h3>
           <div class="why-grid">
-            <div class="why-card">
-              <div class="icon">🎨</div>
-              <h4>Fully Branded</h4>
-              <p>Customize colors, avatar and position to match your brand perfectly</p>
-            </div>
-            <div class="why-card">
-              <div class="icon">🧠</div>
-              <h4>Powered by Claude AI</h4>
-              <p>World's most advanced AI answers your customers intelligently 24/7</p>
-            </div>
-            <div class="why-card">
-              <div class="icon">⚡</div>
-              <h4>Instant Setup</h4>
-              <p>One line of code on your website. Live in under 5 minutes</p>
-            </div>
-            <div class="why-card">
-              <div class="icon">📱</div>
-              <h4>Works Everywhere</h4>
-              <p>WordPress, Wix, Shopify, any website — one embed code fits all</p>
-            </div>
-            <div class="why-card">
-              <div class="icon">🔧</div>
-              <h4>Self-Service</h4>
-              <p>Update your business info anytime — changes apply instantly</p>
-            </div>
-            <div class="why-card">
-              <div class="icon">💰</div>
-              <h4>Pay Per Use</h4>
-              <p>Only pay for conversations you actually have. No wasted budget</p>
-            </div>
+            <div class="why-card"><div class="icon">🎨</div><h4>Fully Branded</h4><p>Customize colors, avatar and position to match your brand perfectly</p></div>
+            <div class="why-card"><div class="icon">🧠</div><h4>Powered by Claude AI</h4><p>World's most advanced AI answers your customers intelligently 24/7</p></div>
+            <div class="why-card"><div class="icon">⚡</div><h4>Instant Setup</h4><p>One line of code on your website. Live in under 5 minutes</p></div>
+            <div class="why-card"><div class="icon">📱</div><h4>Works Everywhere</h4><p>WordPress, Wix, Shopify, any website — one embed code fits all</p></div>
+            <div class="why-card"><div class="icon">🔧</div><h4>Self-Service</h4><p>Update your business info anytime — changes apply instantly</p></div>
+            <div class="why-card"><div class="icon">💰</div><h4>Pay Per Use</h4><p>Only pay for conversations you actually have. No wasted budget</p></div>
           </div>
         </div>
 
-        <!-- CHATBOT LIVE STATUS -->
         <div class="card">
           <h3>Your Chatbot is Live</h3>
           <p style="font-size:13px;color:#555">Your AI chatbot is active and ready to answer customer questions 24/7. Go to <strong>Embed Code</strong> to get the code for your website, or <strong>Chat Preview</strong> to test it.</p>
@@ -374,47 +328,17 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         <div class="page-sub">Update your business information — changes apply instantly</div>
         <div class="card">
           <div class="settings-section-title">🤖 Bot Identity</div>
-          <div class="field-group">
-            <label>Bot Name</label>
-            <input type="text" id="s-bot-name" placeholder="e.g. Sarah, Assistant, HelpBot">
-          </div>
-          <div class="field-group">
-            <label>Welcome Message</label>
-            <input type="text" id="s-welcome" placeholder="e.g. Hi! How can I help you today? 😊">
-          </div>
-
+          <div class="field-group"><label>Bot Name</label><input type="text" id="s-bot-name" placeholder="e.g. Sarah, Assistant, HelpBot"></div>
+          <div class="field-group"><label>Welcome Message</label><input type="text" id="s-welcome" placeholder="e.g. Hi! How can I help you today? 😊"></div>
           <div class="settings-section-title" style="margin-top:20px">🏢 Business Information</div>
-          <div class="field-group">
-            <label>Business Description</label>
-            <textarea id="s-biz-desc" rows="2" placeholder="e.g. A premium hair salon in Dhaka"></textarea>
-          </div>
-          <div class="field-group">
-            <label>Services Offered</label>
-            <textarea id="s-services" rows="2" placeholder="e.g. Haircut 500tk, Coloring 1500tk, Hair Spa 800tk"></textarea>
-          </div>
-          <div class="field-group">
-            <label>Working Hours</label>
-            <input type="text" id="s-hours" placeholder="e.g. Mon-Sat 9am-6pm, Closed Sunday">
-          </div>
-          <div class="field-group">
-            <label>Location</label>
-            <input type="text" id="s-location" placeholder="e.g. Dhaka, Bangladesh">
-          </div>
-          <div class="field-group">
-            <label>Phone Number</label>
-            <input type="text" id="s-phone" placeholder="e.g. +880 1234 567890">
-          </div>
-          <div class="field-group">
-            <label>Website (optional)</label>
-            <input type="text" id="s-website" placeholder="e.g. mywebsite.com">
-          </div>
-
+          <div class="field-group"><label>Business Description</label><textarea id="s-biz-desc" rows="2" placeholder="e.g. A premium hair salon in Dhaka"></textarea></div>
+          <div class="field-group"><label>Services Offered</label><textarea id="s-services" rows="2" placeholder="e.g. Haircut 500tk, Coloring 1500tk"></textarea></div>
+          <div class="field-group"><label>Working Hours</label><input type="text" id="s-hours" placeholder="e.g. Mon-Sat 9am-6pm, Closed Sunday"></div>
+          <div class="field-group"><label>Location</label><input type="text" id="s-location" placeholder="e.g. Dhaka, Bangladesh"></div>
+          <div class="field-group"><label>Phone Number</label><input type="text" id="s-phone" placeholder="e.g. +880 1234 567890"></div>
+          <div class="field-group"><label>Website (optional)</label><input type="text" id="s-website" placeholder="e.g. mywebsite.com"></div>
           <div class="settings-section-title" style="margin-top:20px">📋 Rules & Instructions</div>
-          <div class="field-group">
-            <label>Custom Instructions</label>
-            <textarea id="s-custom" rows="3" placeholder="e.g. Always recommend booking in advance. Never discuss competitor pricing. If unsure, say please call us."></textarea>
-          </div>
-
+          <div class="field-group"><label>Custom Instructions</label><textarea id="s-custom" rows="3" placeholder="e.g. Always recommend booking in advance."></textarea></div>
           <button class="save-btn" onclick="saveSettings()">Save All Settings</button>
           <div class="success-msg hidden" id="settings-saved">✅ Settings saved successfully!</div>
         </div>
@@ -424,10 +348,8 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div id="page-branding" class="hidden">
         <div class="page-title">Branding 🎨</div>
         <div class="page-sub">Customize your chatbot to match your brand — changes show instantly in the preview below</div>
-
         <div class="card">
           <div class="settings-section-title">🎨 Colors</div>
-
           <div class="field-group">
             <label>Chat Header Color</label>
             <div class="color-row">
@@ -435,7 +357,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
               <input type="text" id="b-header-color-text" value="#1a569a" oninput="syncColorFromText('b-header-color', 'b-header-color-text')">
             </div>
           </div>
-
           <div class="field-group">
             <label>Chat Bubble Color</label>
             <div class="color-row">
@@ -443,9 +364,8 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
               <input type="text" id="b-bubble-color-text" value="#1a569a" oninput="syncColorFromText('b-bubble-color', 'b-bubble-color-text')">
             </div>
           </div>
-
           <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
-          <div class="avatar-grid" id="avatar-grid">
+          <div class="avatar-grid">
             <div class="avatar-option selected" data-avatar="robot" onclick="selectAvatar(this)">🤖</div>
             <div class="avatar-option" data-avatar="woman" onclick="selectAvatar(this)">👩</div>
             <div class="avatar-option" data-avatar="man" onclick="selectAvatar(this)">👨</div>
@@ -457,31 +377,20 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <div class="avatar-option" data-avatar="fire" onclick="selectAvatar(this)">🔥</div>
             <div class="avatar-option" data-avatar="crown" onclick="selectAvatar(this)">👑</div>
           </div>
-
           <div class="settings-section-title" style="margin-top:20px">📍 Chat Position</div>
           <div class="position-row">
-            <div class="position-option" id="pos-left" onclick="selectPosition('left')">
-              ← Bottom Left
-            </div>
-            <div class="position-option selected" id="pos-right" onclick="selectPosition('right')">
-              Bottom Right →
-            </div>
+            <div class="position-option" id="pos-left" onclick="selectPosition('left')">← Bottom Left</div>
+            <div class="position-option selected" id="pos-right" onclick="selectPosition('right')">Bottom Right →</div>
           </div>
-
           <div class="settings-section-title" style="margin-top:20px">👁 Live Preview</div>
           <div class="widget-preview-wrap">
-            <div class="widget-bubble-preview" id="bubble-preview" style="right:16px;background:#1a569a">
-              🤖
-            </div>
+            <div class="widget-bubble-preview" id="bubble-preview" style="right:16px;background:#1a569a">🤖</div>
           </div>
-
           <div style="margin-top:20px">
             <button class="save-btn" onclick="saveBranding()">Save Branding</button>
             <div class="success-msg hidden" id="branding-saved">✅ Branding saved! Your chatbot will update within 1 minute.</div>
           </div>
         </div>
-
-        <!-- CHAT PREVIEW WITH BRAND COLORS -->
         <div class="card">
           <h3>💬 Chat Preview With Your Branding</h3>
           <div class="chat-preview-wrap">
@@ -489,7 +398,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
               <span id="brand-avatar-display">🤖</span>
               <span id="brand-bot-name-display">Assistant</span>
             </div>
-            <div class="chat-messages" id="brand-messages">
+            <div class="chat-messages">
               <div class="msg bot"><div class="msg-bubble" id="brand-welcome-bubble">Hi! How can I help you today? 😊</div></div>
             </div>
             <div class="chat-input-row">
@@ -551,18 +460,9 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 <div class="modal-overlay" id="password-modal">
   <div class="modal-box">
     <h3>🔐 Change Your Password</h3>
-    <div class="field-group">
-      <label>Current Password</label>
-      <input type="password" id="pw-current" placeholder="Enter current password">
-    </div>
-    <div class="field-group">
-      <label>New Password</label>
-      <input type="password" id="pw-new" placeholder="Min 8 characters">
-    </div>
-    <div class="field-group">
-      <label>Confirm New Password</label>
-      <input type="password" id="pw-confirm" placeholder="Confirm new password">
-    </div>
+    <div class="field-group"><label>Current Password</label><input type="password" id="pw-current" placeholder="Enter current password"></div>
+    <div class="field-group"><label>New Password</label><input type="password" id="pw-new" placeholder="Min 8 characters"></div>
+    <div class="field-group"><label>Confirm New Password</label><input type="password" id="pw-confirm" placeholder="Confirm new password"></div>
     <div id="pw-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none"></div>
     <div id="pw-success" style="color:#166534;font-size:13px;margin-bottom:10px;display:none"></div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
@@ -577,16 +477,13 @@ const API = 'https://web-production-1c820.up.railway.app';
 let currentClientId = null;
 let currentClient = null;
 let currentBranding = {
-  headerColor: '#1a569a',
-  bubbleColor: '#1a569a',
-  avatar: 'robot',
-  position: 'right',
+  headerColor: '#1a569a', bubbleColor: '#1a569a',
+  avatar: 'robot', position: 'right',
   welcomeMessage: 'Hi! How can I help you today? 😊'
 };
-
 const AVATARS = {
-  robot: '🤖', woman: '👩', man: '👨', star: '⭐', chat: '💬',
-  heart: '❤️', lightning: '⚡', diamond: '💎', fire: '🔥', crown: '👑'
+  robot:'🤖', woman:'👩', man:'👨', star:'⭐', chat:'💬',
+  heart:'❤️', lightning:'⚡', diamond:'💎', fire:'🔥', crown:'👑'
 };
 
 async function doLogin() {
@@ -594,11 +491,7 @@ async function doLogin() {
   const password = document.getElementById('login-password').value;
   const errEl = document.getElementById('login-error');
   errEl.classList.add('hidden');
-  if (!email || !password) {
-    errEl.textContent = 'Please enter your email and password.';
-    errEl.classList.remove('hidden');
-    return;
-  }
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.classList.remove('hidden'); return; }
   try {
     const res = await fetch(API + '/auth/login', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -612,10 +505,7 @@ async function doLogin() {
     localStorage.setItem('emartit_client', JSON.stringify(currentClient));
     localStorage.setItem('emartit_login_email', email);
     showDashboard();
-  } catch(e) {
-    errEl.textContent = e.message;
-    errEl.classList.remove('hidden');
-  }
+  } catch(e) { errEl.textContent = e.message; errEl.classList.remove('hidden'); }
 }
 
 function showDashboard() {
@@ -628,15 +518,13 @@ function showDashboard() {
   fetch(API + '/clients/' + currentClientId + '/trial-status')
     .then(r => r.json())
     .then(data => {
-      const upgradeEl = document.getElementById('sidebar-upgrade');
-      if (upgradeEl) upgradeEl.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
+      const el = document.getElementById('sidebar-upgrade');
+      if (el) el.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
     }).catch(() => {});
 }
 
 function showPage(page, el) {
-  ['overview','settings','branding','preview','embed'].forEach(p => {
-    document.getElementById('page-' + p).classList.add('hidden');
-  });
+  ['overview','settings','branding','preview','embed'].forEach(p => document.getElementById('page-' + p).classList.add('hidden'));
   document.getElementById('page-' + page).classList.remove('hidden');
   document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
   if (el) el.classList.add('active');
@@ -659,19 +547,13 @@ async function loadSettings() {
       document.getElementById('s-website').value = s.website || '';
       document.getElementById('s-custom').value = s.custom_prompt || '';
       document.getElementById('s-welcome').value = s.welcome_message || 'Hi! How can I help you today? 😊';
-
-      // Load branding
       currentBranding.headerColor = s.header_color || '#1a569a';
       currentBranding.bubbleColor = s.bubble_color || '#1a569a';
       currentBranding.avatar = s.bot_avatar || 'robot';
       currentBranding.position = s.chat_position || 'right';
       currentBranding.welcomeMessage = s.welcome_message || 'Hi! How can I help you today? 😊';
-
       applyBrandingToPreview();
-
-      // Update preview header
-      const avatarEmoji = AVATARS[currentBranding.avatar] || '🤖';
-      document.getElementById('preview-avatar').textContent = avatarEmoji;
+      document.getElementById('preview-avatar').textContent = AVATARS[currentBranding.avatar] || '🤖';
       document.getElementById('preview-bot-name').textContent = s.bot_name || 'Your Assistant';
       document.getElementById('preview-header').style.background = currentBranding.headerColor;
       document.getElementById('preview-send-btn').style.background = currentBranding.bubbleColor;
@@ -684,16 +566,9 @@ function loadBrandingPage() {
   document.getElementById('b-header-color-text').value = currentBranding.headerColor;
   document.getElementById('b-bubble-color').value = currentBranding.bubbleColor;
   document.getElementById('b-bubble-color-text').value = currentBranding.bubbleColor;
-
-  // Set avatar
-  document.querySelectorAll('.avatar-option').forEach(el => {
-    el.classList.toggle('selected', el.dataset.avatar === currentBranding.avatar);
-  });
-
-  // Set position
+  document.querySelectorAll('.avatar-option').forEach(el => el.classList.toggle('selected', el.dataset.avatar === currentBranding.avatar));
   document.getElementById('pos-left').classList.toggle('selected', currentBranding.position === 'left');
   document.getElementById('pos-right').classList.toggle('selected', currentBranding.position === 'right');
-
   updateBrandPreview();
 }
 
@@ -702,39 +577,23 @@ function updateBrandPreview() {
   const bubbleColor = document.getElementById('b-bubble-color').value;
   const avatarKey = document.querySelector('.avatar-option.selected')?.dataset.avatar || 'robot';
   const position = document.querySelector('.position-option.selected')?.id === 'pos-left' ? 'left' : 'right';
-
-  // Update text inputs
   document.getElementById('b-header-color-text').value = headerColor;
   document.getElementById('b-bubble-color-text').value = bubbleColor;
-
-  // Update brand chat preview
   document.getElementById('brand-chat-header').style.background = headerColor;
   document.getElementById('brand-avatar-display').textContent = AVATARS[avatarKey] || '🤖';
-  document.getElementById('brand-send-btn') && (document.getElementById('brand-send-btn').style.background = bubbleColor);
-
-  // Update bubble preview
+  const sendBtn = document.getElementById('brand-send-btn');
+  if (sendBtn) sendBtn.style.background = bubbleColor;
   const bubble = document.getElementById('bubble-preview');
   bubble.style.background = bubbleColor;
   bubble.textContent = AVATARS[avatarKey] || '🤖';
-  if (position === 'left') {
-    bubble.style.left = '16px';
-    bubble.style.right = 'auto';
-  } else {
-    bubble.style.right = '16px';
-    bubble.style.left = 'auto';
-  }
-
-  // Update bot name in brand preview
-  const botName = document.getElementById('s-bot-name')?.value || 'Assistant';
-  document.getElementById('brand-bot-name-display').textContent = botName;
+  if (position === 'left') { bubble.style.left = '16px'; bubble.style.right = 'auto'; }
+  else { bubble.style.right = '16px'; bubble.style.left = 'auto'; }
+  document.getElementById('brand-bot-name-display').textContent = document.getElementById('s-bot-name')?.value || 'Assistant';
 }
 
 function syncColorFromText(colorId, textId) {
   const val = document.getElementById(textId).value;
-  if (/^#[0-9A-F]{6}$/i.test(val)) {
-    document.getElementById(colorId).value = val;
-    updateBrandPreview();
-  }
+  if (/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById(colorId).value = val; updateBrandPreview(); }
 }
 
 function selectAvatar(el) {
@@ -758,10 +617,7 @@ function applyBrandingToPreview() {
   const brandAvatar = document.getElementById('brand-avatar-display');
   if (brandAvatar) brandAvatar.textContent = avatarEmoji;
   const bubble = document.getElementById('bubble-preview');
-  if (bubble) {
-    bubble.style.background = currentBranding.bubbleColor;
-    bubble.textContent = avatarEmoji;
-  }
+  if (bubble) { bubble.style.background = currentBranding.bubbleColor; bubble.textContent = avatarEmoji; }
   const welcomeBubble = document.getElementById('brand-welcome-bubble');
   if (welcomeBubble) welcomeBubble.textContent = currentBranding.welcomeMessage;
 }
@@ -772,9 +628,7 @@ async function saveBranding() {
   const avatarKey = document.querySelector('.avatar-option.selected')?.dataset.avatar || 'robot';
   const position = document.querySelector('.position-option.selected')?.id === 'pos-left' ? 'left' : 'right';
   const welcomeMsg = document.getElementById('s-welcome')?.value || 'Hi! How can I help you today? 😊';
-
   currentBranding = { headerColor, bubbleColor, avatar: avatarKey, position, welcomeMessage: welcomeMsg };
-
   try {
     const res = await fetch(API + '/clients/settings', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -787,12 +641,8 @@ async function saveBranding() {
         phone: document.getElementById('s-phone')?.value || '',
         website: document.getElementById('s-website')?.value || '',
         bot_name: document.getElementById('s-bot-name')?.value || 'Assistant',
-        bot_color: bubbleColor,
-        bubble_color: bubbleColor,
-        header_color: headerColor,
-        chat_position: position,
-        bot_avatar: avatarKey,
-        welcome_message: welcomeMsg,
+        bot_color: bubbleColor, bubble_color: bubbleColor, header_color: headerColor,
+        chat_position: position, bot_avatar: avatarKey, welcome_message: welcomeMsg,
         custom_prompt: document.getElementById('s-custom')?.value || ''
       })
     });
@@ -800,7 +650,6 @@ async function saveBranding() {
       document.getElementById('branding-saved').classList.remove('hidden');
       setTimeout(() => document.getElementById('branding-saved').classList.add('hidden'), 3000);
       applyBrandingToPreview();
-      // Update preview page colors
       document.getElementById('preview-header').style.background = headerColor;
       document.getElementById('preview-send-btn').style.background = bubbleColor;
       document.getElementById('preview-avatar').textContent = AVATARS[avatarKey] || '🤖';
@@ -821,10 +670,8 @@ async function saveSettings() {
         phone: document.getElementById('s-phone').value,
         website: document.getElementById('s-website').value,
         bot_name: document.getElementById('s-bot-name').value,
-        bot_color: currentBranding.bubbleColor,
-        bubble_color: currentBranding.bubbleColor,
-        header_color: currentBranding.headerColor,
-        chat_position: currentBranding.position,
+        bot_color: currentBranding.bubbleColor, bubble_color: currentBranding.bubbleColor,
+        header_color: currentBranding.headerColor, chat_position: currentBranding.position,
         bot_avatar: currentBranding.avatar,
         welcome_message: document.getElementById('s-welcome').value,
         custom_prompt: document.getElementById('s-custom').value
@@ -869,13 +716,13 @@ async function loadUsage() {
       const pct = Math.min(100, (convosUsed / convosLimit) * 100);
       const urgentColor = daysLeft === 0 ? '#dc2626' : daysLeft === 1 ? '#f59e0b' : '#1a56a0';
       trialBanner.style.display = 'block';
+      trialBanner.className = 'trial-animate';
       trialBanner.innerHTML = `
         <div style="background:white;border:2px solid ${urgentColor};border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.1)">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
             <div>
               <div style="font-size:11px;font-weight:700;color:${urgentColor};text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🎯 Free Trial Active</div>
-
-            <div class="countdown-animate" style="font-size:28px;font-weight:700;color:${urgentColor}">${daysLeft} days ${hoursLeft % 24} hours remaining</div>
+              <div class="countdown-animate" style="font-size:28px;font-weight:700;color:${urgentColor}">${daysLeft} days ${hoursLeft % 24} hours remaining</div>
               <div style="font-size:13px;color:#64748b;margin-top:6px">Expires on ${new Date(trialData.trial_end).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
             </div>
             <div style="text-align:center;background:#f8fafc;border-radius:10px;padding:16px 24px;min-width:160px">
@@ -895,28 +742,26 @@ async function loadUsage() {
         </div>`;
       document.getElementById('stat-status').textContent = '🎯';
       document.getElementById('stat-status-lbl').textContent = 'Trial Account';
+
     } else if (accountType === 'expired') {
       trialBanner.style.display = 'block';
+      trialBanner.className = 'trial-animate';
       trialBanner.innerHTML = `
-      trialBanner.style.display = 'block';
-trialBanner.className = 'trial-animate';
-trialBanner.innerHTML = `
-        
         <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:14px;padding:24px;text-align:center">
           <div style="font-size:32px;margin-bottom:12px">❌</div>
           <div style="font-size:20px;font-weight:700;color:#991b1b;margin-bottom:8px">Your Free Trial Has Ended</div>
           <div style="font-size:14px;color:#7f1d1d;margin-bottom:20px">Your chatbot is currently inactive. Subscribe now to restore access.</div>
-          <a href="https://ematity.com/subscribe" target="_blank" style="background:#dc2626;color:white;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none">Subscribe Now →</a>
+          <a href="https://ematity.com/subscribe" target="_blank" class="upgrade-btn-animate" style="background:#dc2626;color:white;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block">Subscribe Now →</a>
         </div>`;
       document.getElementById('stat-status').textContent = '❌';
       document.getElementById('stat-status-lbl').textContent = 'Trial Expired';
+
     } else {
       trialBanner.style.display = 'none';
       document.getElementById('stat-status').textContent = '✅';
       document.getElementById('stat-status-lbl').textContent = 'Chatbot Active';
     }
 
-    // Password warning
     const hasChangedPassword = localStorage.getItem('emartit_password_changed_' + currentClientId);
     const warningEl = document.getElementById('password-warning');
     if (warningEl) warningEl.style.display = hasChangedPassword ? 'none' : 'block';
@@ -935,8 +780,7 @@ async function sendPreview() {
   if (!msg) return;
   input.value = '';
   const messagesEl = document.getElementById('preview-messages');
-  const userBubbleColor = currentBranding.bubbleColor;
-  messagesEl.innerHTML += `<div class="msg user"><div class="msg-bubble" style="background:${userBubbleColor}">${msg}</div></div>`;
+  messagesEl.innerHTML += `<div class="msg user"><div class="msg-bubble" style="background:${currentBranding.bubbleColor}">${msg}</div></div>`;
   messagesEl.innerHTML += `<div class="msg bot" id="typing"><div class="msg-bubble">Typing...</div></div>`;
   messagesEl.scrollTop = messagesEl.scrollHeight;
   try {
@@ -1004,10 +848,7 @@ async function changePassword() {
       localStorage.setItem('emartit_password_changed_' + currentClientId, 'true');
       document.getElementById('password-warning').style.display = 'none';
       setTimeout(() => closePasswordModal(), 2000);
-    } else {
-      errEl.textContent = 'Failed to update password.';
-      errEl.style.display = 'block';
-    }
+    } else { errEl.textContent = 'Failed to update password.'; errEl.style.display = 'block'; }
   } catch(e) { errEl.textContent = 'Error: ' + e.message; errEl.style.display = 'block'; }
 }
 
