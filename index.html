@@ -40,7 +40,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .dashboard { display: flex; min-height: 100vh; }
 .sidebar {
   width: 240px; background: #1a1a2e; color: white;
-  padding: 0px 0; flex-shrink: 0;
+  padding: 0px 0; flex-shrink: 0; display: flex; flex-direction: column;
 }
 .sidebar-logo {
   padding: 16px 24px 20px;
@@ -59,6 +59,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .nav-item:hover { background: #ffffff10; color: white; }
 .nav-item.active { background: #1a569a; color: white; }
 .nav-logout { margin-top: auto; padding: 12px 24px; cursor: pointer; font-size: 14px; color: #888; }
+.sidebar-bottom { margin-top: auto; }
 
 .main-content { flex: 1; padding: 30px; overflow-y: auto; }
 .page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
@@ -117,6 +118,19 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .chat-input-row input { flex: 1; padding: 8px 12px; border: 1.5px solid #dde3ec; border-radius: 6px; font-size: 13px; outline: none; }
 .chat-input-row button { padding: 8px 16px; background: #1a569a; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
 
+/* PASSWORD CHANGE MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: white; border-radius: 14px; padding: 28px;
+  width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-box h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
+
 @media (max-width: 600px) {
   .sidebar { width: 60px; }
   .sidebar-logo, .nav-item span { display: none; }
@@ -158,7 +172,15 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div class="nav-item" onclick="showPage('settings')">⚙️ <span>Bot Settings</span></div>
       <div class="nav-item" onclick="showPage('preview')">💬 <span>Chat Preview</span></div>
       <div class="nav-item" onclick="showPage('embed')">🔗 <span>Embed Code</span></div>
-      <div class="nav-item" onclick="doLogout()" style="margin-top:20px">🚪 <span>Logout</span></div>
+      <div class="sidebar-bottom">
+        <div id="sidebar-upgrade" style="display:none;padding:16px">
+          <a href="https://ematity.com/subscribe" target="_blank"
+            style="display:block;background:linear-gradient(135deg,#f59e0b,#d97706);color:white;text-align:center;padding:10px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">
+            🚀 Upgrade to Paid →
+          </a>
+        </div>
+        <div class="nav-item" onclick="doLogout()">🚪 <span>Logout</span></div>
+      </div>
     </div>
 
     <div class="main-content">
@@ -167,6 +189,25 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div id="page-overview">
         <div class="page-title">Welcome back! 👋</div>
         <div class="page-sub" id="welcome-sub">Managing your chatbot</div>
+
+        <!-- TRIAL BANNER -->
+        <div id="trial-banner" style="display:none;margin-bottom:20px"></div>
+
+        <!-- DEFAULT PASSWORD WARNING -->
+        <div id="password-warning" style="display:none;background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="font-size:20px">⚠️</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:700;color:#92400e">You are using a temporary password</div>
+              <div style="font-size:12px;color:#78350f;margin-top:3px">For your security, please change your password now.</div>
+            </div>
+            <button onclick="showChangePassword()"
+              style="background:#f59e0b;color:white;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">
+              Change Password Now →
+            </button>
+          </div>
+        </div>
+
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-num" id="stat-convos">—</div>
@@ -177,7 +218,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <div class="stat-lbl">Estimated Charge</div>
           </div>
           <div class="stat-card">
-            <div class="stat-num">✅</div>
+            <div class="stat-num" id="stat-status">✅</div>
             <div class="stat-lbl">Chatbot Status: Active</div>
           </div>
         </div>
@@ -274,6 +315,37 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   </div>
 </div>
 
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-overlay" id="password-modal">
+  <div class="modal-box">
+    <h3>🔐 Change Your Password</h3>
+    <div class="field-group">
+      <label>Current Password</label>
+      <input type="password" id="pw-current" placeholder="Enter current password">
+    </div>
+    <div class="field-group">
+      <label>New Password</label>
+      <input type="password" id="pw-new" placeholder="Enter new password (min 8 chars)">
+    </div>
+    <div class="field-group">
+      <label>Confirm New Password</label>
+      <input type="password" id="pw-confirm" placeholder="Confirm new password">
+    </div>
+    <div id="pw-error" style="color:#dc2626;font-size:13px;margin-bottom:10px;display:none"></div>
+    <div id="pw-success" style="color:#166534;font-size:13px;margin-bottom:10px;display:none"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button onclick="closePasswordModal()"
+        style="padding:10px 20px;border:1px solid #d1d5db;border-radius:8px;background:white;color:#64748b;font-size:13px;cursor:pointer">
+        Cancel
+      </button>
+      <button onclick="changePassword()"
+        style="padding:10px 24px;border:none;border-radius:8px;background:#1a569a;color:white;font-size:13px;font-weight:700;cursor:pointer">
+        Update Password
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 const API = 'https://web-production-1c820.up.railway.app';
 let currentClientId = null;
@@ -302,8 +374,11 @@ async function doLogin() {
 
     currentClientId = data.client_id;
     currentClient = data.client;
+
+    // Store login password hash hint for default password detection
     localStorage.setItem('emartit_client_id', currentClientId);
     localStorage.setItem('emartit_client', JSON.stringify(currentClient));
+    localStorage.setItem('emartit_login_email', email);
 
     showDashboard();
   } catch(e) {
@@ -319,6 +394,15 @@ function showDashboard() {
   document.getElementById('welcome-sub').textContent = 'Managing ' + (currentClient.business_name || 'your chatbot');
   loadSettings();
   loadUsage();
+  // Show upgrade button for trial clients
+  fetch(API + '/clients/' + currentClientId + '/trial-status')
+    .then(r => r.json())
+    .then(data => {
+      const upgradeEl = document.getElementById('sidebar-upgrade');
+      if (upgradeEl) {
+        upgradeEl.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
+      }
+    }).catch(() => {});
 }
 
 function showPage(page) {
@@ -352,10 +436,16 @@ async function loadSettings() {
 
 async function loadUsage() {
   try {
-    const res = await fetch(API + '/clients/' + currentClientId + '/usage');
-    const data = await res.json();
-    if (data.usage && data.usage.length > 0) {
-      const u = data.usage[0];
+    const [usageRes, trialRes] = await Promise.all([
+      fetch(API + '/clients/' + currentClientId + '/usage'),
+      fetch(API + '/clients/' + currentClientId + '/trial-status')
+    ]);
+    const usageData = await usageRes.json();
+    const trialData = await trialRes.json();
+
+    // Update conversation count and charge
+    if (usageData.usage && usageData.usage.length > 0) {
+      const u = usageData.usage[0];
       document.getElementById('stat-convos').textContent = u.conversation_count || 0;
       const charge = Math.max((u.conversation_count || 0) * 0.07, 10);
       document.getElementById('stat-charge').textContent = '$' + charge.toFixed(2);
@@ -363,9 +453,183 @@ async function loadUsage() {
       document.getElementById('stat-convos').textContent = '0';
       document.getElementById('stat-charge').textContent = '$10.00';
     }
+
+    // Trial banner
+    const accountType = trialData.account_type;
+    const trialBanner = document.getElementById('trial-banner');
+
+    if (accountType === 'trial') {
+      const daysLeft = trialData.days_remaining || 0;
+      const hoursLeft = trialData.hours_remaining || 0;
+      const convosUsed = trialData.conversations_used || 0;
+      const convosLimit = trialData.conversations_limit || 10;
+      const convosLeft = trialData.conversations_remaining || 0;
+      const pct = Math.min(100, (convosUsed / convosLimit) * 100);
+      const urgentColor = daysLeft === 0 ? '#dc2626' : daysLeft === 1 ? '#f59e0b' : '#1a56a0';
+
+      trialBanner.style.display = 'block';
+      trialBanner.innerHTML = `
+        <div style="background:white;border:2px solid ${urgentColor};border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.1)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:${urgentColor};text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">
+                🎯 Free Trial Active
+              </div>
+              <div style="font-size:28px;font-weight:700;color:${urgentColor}">
+                ${daysLeft} days ${hoursLeft % 24} hours remaining
+              </div>
+              <div style="font-size:13px;color:#64748b;margin-top:6px">
+                Your trial expires on ${new Date(trialData.trial_end).toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'})}
+              </div>
+            </div>
+            <div style="text-align:center;background:#f8fafc;border-radius:10px;padding:16px 24px;min-width:160px">
+              <div style="font-size:32px;font-weight:700;color:${urgentColor}">${convosLeft}</div>
+              <div style="font-size:12px;color:#64748b;font-weight:600">conversations left</div>
+              <div style="font-size:11px;color:#94a3b8;margin-top:2px">${convosUsed} of ${convosLimit} used</div>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:6px">
+              <span>Trial usage</span>
+              <span>${Math.round(pct)}% used</span>
+            </div>
+            <div style="background:#e5e7eb;border-radius:8px;height:10px">
+              <div style="background:${urgentColor};border-radius:8px;height:10px;width:${pct}%;transition:width 0.3s"></div>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="font-size:13px;color:#64748b">
+              Enjoying the chatbot? Upgrade to keep it running after your trial.
+            </div>
+            <a href="https://ematity.com/subscribe" target="_blank"
+              style="background:#1a56a0;color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;display:inline-block">
+              🚀 Upgrade to Paid Plan →
+            </a>
+          </div>
+        </div>
+      `;
+
+      // Update status card for trial
+      document.getElementById('stat-status').textContent = '🎯';
+      document.querySelector('#stat-status + .stat-lbl').textContent = 'Trial Account';
+
+    } else if (accountType === 'expired') {
+      trialBanner.style.display = 'block';
+      trialBanner.innerHTML = `
+        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:14px;padding:24px;text-align:center">
+          <div style="font-size:32px;margin-bottom:12px">❌</div>
+          <div style="font-size:20px;font-weight:700;color:#991b1b;margin-bottom:8px">Your Free Trial Has Ended</div>
+          <div style="font-size:14px;color:#7f1d1d;margin-bottom:20px">
+            Your chatbot is currently inactive. Your customers cannot reach you.<br>
+            Subscribe now to restore full access instantly.
+          </div>
+          <a href="https://ematity.com/subscribe" target="_blank"
+            style="background:#dc2626;color:white;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block">
+            Subscribe Now — Keep Your Chatbot Live →
+          </a>
+        </div>
+      `;
+      document.getElementById('stat-status').textContent = '❌';
+      document.querySelector('#stat-status + .stat-lbl').textContent = 'Trial Expired';
+    } else {
+      trialBanner.style.display = 'none';
+      document.getElementById('stat-status').textContent = '✅';
+      document.querySelector('#stat-status + .stat-lbl').textContent = 'Chatbot Status: Active';
+    }
+
+    // Show default password warning
+    const passwordWarning = document.getElementById('password-warning');
+    if (passwordWarning) {
+      const hasChangedPassword = localStorage.getItem('emartit_password_changed_' + currentClientId);
+      if (!hasChangedPassword) {
+        passwordWarning.style.display = 'block';
+      }
+    }
+
   } catch(e) { console.log('Usage load error:', e); }
 }
 
+// ============ PASSWORD CHANGE ============
+function showChangePassword() {
+  document.getElementById('password-modal').classList.add('open');
+  document.getElementById('pw-error').style.display = 'none';
+  document.getElementById('pw-success').style.display = 'none';
+  document.getElementById('pw-current').value = '';
+  document.getElementById('pw-new').value = '';
+  document.getElementById('pw-confirm').value = '';
+}
+
+function closePasswordModal() {
+  document.getElementById('password-modal').classList.remove('open');
+}
+
+async function changePassword() {
+  const current = document.getElementById('pw-current').value;
+  const newPw = document.getElementById('pw-new').value;
+  const confirm = document.getElementById('pw-confirm').value;
+  const errEl = document.getElementById('pw-error');
+  const sucEl = document.getElementById('pw-success');
+  errEl.style.display = 'none';
+  sucEl.style.display = 'none';
+
+  if (!current || !newPw || !confirm) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (newPw.length < 8) {
+    errEl.textContent = 'New password must be at least 8 characters.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (newPw !== confirm) {
+    errEl.textContent = 'Passwords do not match.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const email = localStorage.getItem('emartit_login_email');
+    // Verify current password by attempting login
+    const verifyRes = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password: current})
+    });
+    if (!verifyRes.ok) {
+      errEl.textContent = 'Current password is incorrect.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    // Update password
+    const updateRes = await fetch(API + '/auth/change-password', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        client_id: currentClientId,
+        email: email,
+        new_password: newPw
+      })
+    });
+
+    if (updateRes.ok) {
+      sucEl.textContent = '✅ Password changed successfully!';
+      sucEl.style.display = 'block';
+      localStorage.setItem('emartit_password_changed_' + currentClientId, 'true');
+      document.getElementById('password-warning').style.display = 'none';
+      setTimeout(() => closePasswordModal(), 2000);
+    } else {
+      errEl.textContent = 'Failed to update password. Please try again.';
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Error: ' + e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+// ============ SETTINGS ============
 async function saveSettings() {
   try {
     const res = await fetch(API + '/clients/settings', {
@@ -433,12 +697,19 @@ function copyEmbed() {
 function doLogout() {
   localStorage.removeItem('emartit_client_id');
   localStorage.removeItem('emartit_client');
+  localStorage.removeItem('emartit_login_email');
   currentClientId = null;
   currentClient = null;
   document.getElementById('dashboard-page').classList.add('hidden');
   document.getElementById('login-page').classList.remove('hidden');
 }
 
+// Close modal when clicking outside
+document.getElementById('password-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePasswordModal();
+});
+
+// Auto-login if saved
 const savedId = localStorage.getItem('emartit_client_id');
 const savedClient = localStorage.getItem('emartit_client');
 if (savedId && savedClient) {
