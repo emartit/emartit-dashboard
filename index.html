@@ -236,8 +236,15 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       </div>
     </div>
 
-    <div class="main-content">
-
+<div class="main-content">
+  <!-- TOP BAR -->
+  <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:20px;gap:12px">
+    <div style="font-size:13px;color:#64748b" id="topbar-bizname"></div>
+    <button onclick="doLogout()"
+      style="background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
+      🚪 Logout
+    </button>
+  </div>
       <!-- OVERVIEW -->
       <div id="page-overview">
         <div class="page-title">Welcome back! 👋</div>
