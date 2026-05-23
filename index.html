@@ -890,7 +890,8 @@ async function saveBranding() {
         bot_name: document.getElementById('s-bot-name')?.value || 'Assistant',
         bot_color: bubbleColor, bubble_color: bubbleColor, header_color: headerColor,
         chat_position: position, bot_avatar: avatarKey, welcome_message: welcomeMsg,
-        custom_prompt: document.getElementById('s-custom')?.value || ''
+        custom_prompt: document.getElementById('s-custom')?.value || '',
+        bot_avatar_url: customAvatarUrl || '',
       })
     });
     if (res.ok) {
