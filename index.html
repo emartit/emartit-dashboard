@@ -735,6 +735,11 @@ function loadBrandingPage() {
   document.getElementById('pos-left').classList.toggle('selected', currentBranding.position === 'left');
   document.getElementById('pos-right').classList.toggle('selected', currentBranding.position === 'right');
   updateBrandPreview();
+  if (currentBranding.avatarUrl) {
+  customAvatarUrl = currentBranding.avatarUrl;
+  showAvatarPreview(currentBranding.avatarUrl, true);
+  document.getElementById('remove-avatar-btn').style.display = 'inline-block';
+}
 }
 
 function updateBrandPreview() {
