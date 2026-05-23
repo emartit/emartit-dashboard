@@ -520,6 +520,9 @@ function showDashboard() {
   document.getElementById('dashboard-page').classList.remove('hidden');
   document.getElementById('biz-name-sidebar').textContent = currentClient.business_name || '';
   document.getElementById('welcome-sub').textContent = 'Managing ' + (currentClient.business_name || 'your chatbot');
+  const topbar = document.getElementById('topbar-bizname');
+if (topbar) topbar.textContent = currentClient.business_name || '';
+  
   loadSettings();
   loadUsage();
   fetch(API + '/clients/' + currentClientId + '/trial-status')
