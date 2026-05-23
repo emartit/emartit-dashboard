@@ -715,6 +715,7 @@ async function loadSettings() {
       currentBranding.bubbleColor = s.bubble_color || '#1a569a';
       currentBranding.avatar = s.bot_avatar || 'robot';
       currentBranding.position = s.chat_position || 'right';
+      currentBranding.avatarUrl = s.bot_avatar_url || '';
       currentBranding.welcomeMessage = s.welcome_message || 'Hi! How can I help you today? 😊';
       applyBrandingToPreview();
       document.getElementById('preview-avatar').textContent = AVATARS[currentBranding.avatar] || '🤖';
