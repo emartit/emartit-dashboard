@@ -4,116 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>eMart IT — Client Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
-
 .hidden { display: none !important; }
-
-.login-wrap {
-  min-height: 100vh; display: flex; align-items: center;
-  justify-content: center; background: linear-gradient(135deg, #1a569a, #2e75b6);
-}
-.login-box {
-  background: white; border-radius: 16px; padding: 40px;
-  width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-}
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a569a, #2e75b6); }
+.login-box { background: white; border-radius: 16px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
 .login-box p { font-size: 13px; color: #888; margin-bottom: 24px; }
 .form-group { margin-bottom: 16px; }
 .form-group label { font-size: 12px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
-.form-group input {
-  width: 100%; padding: 10px 14px; border: 1.5px solid #dde3ec;
-  border-radius: 8px; font-size: 14px; outline: none;
-}
+.form-group input { width: 100%; padding: 10px 14px; border: 1.5px solid #dde3ec; border-radius: 8px; font-size: 14px; outline: none; }
 .form-group input:focus { border-color: #1a569a; }
-.btn {
-  width: 100%; padding: 12px; background: #1a569a; color: white;
-  border: none; border-radius: 8px; font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: background 0.2s;
-}
+.btn { width: 100%; padding: 12px; background: #1a569a; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
 .btn:hover { background: #154a85; }
 .error-msg { color: #c73e1d; font-size: 12px; margin-top: 10px; text-align: center; }
-
 .dashboard { display: flex; min-height: 100vh; }
-.sidebar {
-  width: 240px; background: #1a1a2e; color: white;
-  padding: 0; flex-shrink: 0; display: flex; flex-direction: column;
-}
-.sidebar-logo {
-  padding: 16px 24px 20px; background: white; text-align: center;
-  border-bottom: 3px solid #1a569a; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
+.sidebar { width: 240px; background: #1a1a2e; color: white; padding: 0; flex-shrink: 0; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 16px 24px 20px; background: white; text-align: center; border-bottom: 3px solid #1a569a; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
 .sidebar-logo p { font-size: 13px; color: #1a569a; margin-top: 8px; font-weight: 700; }
-.nav-item {
-  padding: 12px 24px; cursor: pointer; font-size: 14px;
-  color: #aaa; transition: all 0.15s; display: flex; align-items: center; gap: 10px;
-}
+.nav-item { padding: 12px 24px; cursor: pointer; font-size: 14px; color: #aaa; transition: all 0.15s; display: flex; align-items: center; gap: 10px; }
 .nav-item:hover { background: #ffffff10; color: white; }
 .nav-item.active { background: #1a569a; color: white; }
 .sidebar-bottom { margin-top: auto; }
-
 .main-content { flex: 1; padding: 30px; overflow-y: auto; }
 .page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
 .page-sub { font-size: 13px; color: #888; margin-bottom: 24px; }
-
-.card {
-  background: white; border-radius: 12px; padding: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 20px;
-}
+.card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 20px; }
 .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: #1a569a; }
-
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px; }
 .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); text-align: center; }
 .stat-num { font-size: 28px; font-weight: 700; color: #1a569a; }
 .stat-lbl { font-size: 12px; color: #888; margin-top: 4px; }
-
 .field-group { margin-bottom: 16px; }
 .field-group label { font-size: 12px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
-.field-group input, .field-group textarea, .field-group select {
-  width: 100%; padding: 10px 14px; border: 1.5px solid #dde3ec;
-  border-radius: 8px; font-size: 13px; outline: none; resize: vertical;
-}
+.field-group input, .field-group textarea, .field-group select { width: 100%; padding: 10px 14px; border: 1.5px solid #dde3ec; border-radius: 8px; font-size: 13px; outline: none; resize: vertical; }
 .field-group input:focus, .field-group textarea:focus, .field-group select:focus { border-color: #1a569a; }
-.save-btn {
-  padding: 10px 24px; background: #1a569a; color: white;
-  border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
-}
+.save-btn { padding: 10px 24px; background: #1a569a; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .save-btn:hover { background: #154a85; }
 .success-msg { color: #3bb273; font-size: 12px; margin-top: 8px; }
-
-.embed-box {
-  background: #1a1a2e; color: #60a5fa; padding: 16px; border-radius: 8px;
-  font-family: monospace; font-size: 12px; word-break: break-all; margin-bottom: 12px;
-}
-.copy-btn {
-  padding: 8px 18px; background: #e8f0fb; color: #1a569a;
-  border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
-}
-
+.embed-box { background: #1a1a2e; color: #60a5fa; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; word-break: break-all; margin-bottom: 12px; }
+.copy-btn { padding: 8px 18px; background: #e8f0fb; color: #1a569a; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
 .color-row { display: flex; align-items: center; gap: 12px; }
-.color-row input[type="color"] {
-  width: 48px; height: 40px; border: 1.5px solid #dde3ec;
-  border-radius: 8px; padding: 2px; cursor: pointer;
-}
+.color-row input[type="color"] { width: 48px; height: 40px; border: 1.5px solid #dde3ec; border-radius: 8px; padding: 2px; cursor: pointer; }
 .color-row input[type="text"] { flex: 1; }
-
 .avatar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px; }
-.avatar-option {
-  border: 2px solid #e0e8f0; border-radius: 10px; padding: 10px;
-  text-align: center; cursor: pointer; font-size: 28px; transition: all 0.15s;
-}
+.avatar-option { border: 2px solid #e0e8f0; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; font-size: 28px; transition: all 0.15s; }
 .avatar-option:hover { border-color: #1a569a; background: #e8f0fb; }
 .avatar-option.selected { border-color: #1a569a; background: #e8f0fb; }
-
 .position-row { display: flex; gap: 12px; margin-top: 8px; }
-.position-option {
-  flex: 1; border: 2px solid #e0e8f0; border-radius: 10px; padding: 12px;
-  text-align: center; cursor: pointer; font-size: 12px; font-weight: 600;
-  color: #64748b; transition: all 0.15s;
-}
+.position-option { flex: 1; border: 2px solid #e0e8f0; border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 600; color: #64748b; transition: all 0.15s; }
 .position-option:hover { border-color: #1a569a; }
 .position-option.selected { border-color: #1a569a; background: #e8f0fb; color: #1a569a; }
-
 .chat-preview-wrap { border: 1.5px solid #e0e8f0; border-radius: 10px; overflow: hidden; }
 .chat-header-preview { color: white; padding: 12px 16px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
 .chat-messages { height: 250px; overflow-y: auto; padding: 16px; background: #f9fbfd; }
@@ -125,92 +67,55 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #e0e8f0; }
 .chat-input-row input { flex: 1; padding: 8px 12px; border: 1.5px solid #dde3ec; border-radius: 6px; font-size: 13px; outline: none; }
 .chat-input-row button { padding: 8px 16px; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
-
 .widget-preview-wrap { position: relative; height: 120px; background: #f0f4f8; border-radius: 10px; border: 1.5px solid #e0e8f0; overflow: hidden; }
-.widget-bubble-preview {
-  position: absolute; bottom: 16px; width: 56px; height: 56px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer;
-}
-
+.widget-bubble-preview { position: absolute; bottom: 16px; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal-box { background: white; border-radius: 14px; padding: 28px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
 .modal-box h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
-
-.settings-section-title {
-  font-size: 13px; font-weight: 700; color: #1a569a;
-  padding: 12px 0 8px; border-bottom: 2px solid #e8f0fb;
-  margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
-}
-
+.settings-section-title { font-size: 13px; font-weight: 700; color: #1a569a; padding: 12px 0 8px; border-bottom: 2px solid #e8f0fb; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
 .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-top: 8px; }
 .why-card { background: #f8fafc; border-radius: 10px; padding: 16px; border: 1px solid #e5e7eb; text-align: center; }
 .why-card .icon { font-size: 28px; margin-bottom: 8px; }
 .why-card h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
 .why-card p { font-size: 12px; color: #64748b; line-height: 1.5; }
-
 .checklist { list-style: none; }
 .checklist li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #374151; }
 .checklist li:last-child { border-bottom: none; }
 .check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
 .check-done { background: #dcfce7; color: #166534; }
 .check-todo { background: #f1f5f9; color: #94a3b8; }
-
-.hours-row {
-  display: grid; grid-template-columns: 110px 1fr 1fr 60px;
-  gap: 8px; align-items: center; padding: 8px 10px;
-  background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb;
-}
-.hours-row input[type="time"] {
-  padding: 6px 10px; border: 1.5px solid #dde3ec;
-  border-radius: 6px; font-size: 12px; outline: none; width: 100%;
-}
+.hours-row { display: grid; grid-template-columns: 110px 1fr 1fr 60px; gap: 8px; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb; }
+.hours-row input[type="time"] { padding: 6px 10px; border: 1.5px solid #dde3ec; border-radius: 6px; font-size: 12px; outline: none; width: 100%; }
 .hours-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-
 .leads-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .leads-table th { background: #f1f5f9; color: #64748b; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; font-weight: 700; }
 .leads-table td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; color: #1a1a2e; }
 .leads-table tr:last-child td { border-bottom: none; }
 .leads-table tr:hover td { background: #f8fafc; }
-
 .toggle-wrap { position: relative; display: inline-block; width: 48px; height: 26px; cursor: pointer; }
 .toggle-wrap input { opacity: 0; width: 0; height: 0; }
 .toggle-bg { position: absolute; inset: 0; background: #d1d5db; border-radius: 26px; transition: 0.3s; }
 .toggle-dot { position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 .toggle-wrap input:checked + .toggle-bg { background: #1a569a; }
 .toggle-wrap input:checked ~ .toggle-dot { transform: translateX(22px); }
-
-/* QUICK REPLY ROW */
 .qr-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e5e7eb; }
 .qr-row input { padding:8px 12px; border:1.5px solid #dde3ec; border-radius:8px; font-size:13px; outline:none; }
 .qr-row input:focus { border-color:#1a569a; }
 .qr-text { flex:2; min-width:140px; }
 .qr-link { flex:3; min-width:180px; }
 .qr-label { font-size:10px; color:#94a3b8; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px; }
-
-@media (max-width: 600px) {
-  .sidebar { width: 60px; }
-  .sidebar-logo, .nav-item span { display: none; }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,86,154,0.4); }
-  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(26,86,154,0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,86,154,0); }
-}
-@keyframes slide-in {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(245,158,11,0.5); }
-  50% { box-shadow: 0 0 20px rgba(245,158,11,0.9), 0 0 40px rgba(245,158,11,0.4); }
-}
-@keyframes countdown-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
+/* ANALYTICS */
+.analytics-stat { background: white; border-radius: 12px; padding: 20px 24px; border: 1px solid #e5e7eb; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.analytics-stat .num { font-size: 36px; font-weight: 700; color: #1a569a; }
+.analytics-stat .lbl { font-size: 12px; color: #64748b; margin-top: 4px; font-weight: 600; }
+.chart-card { background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 20px; }
+.chart-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb; }
+@media (max-width: 600px) { .sidebar { width: 60px; } .sidebar-logo, .nav-item span { display: none; } }
+@keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,86,154,0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(26,86,154,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26,86,154,0); } }
+@keyframes slide-in { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 5px rgba(245,158,11,0.5); } 50% { box-shadow: 0 0 20px rgba(245,158,11,0.9), 0 0 40px rgba(245,158,11,0.4); } }
+@keyframes countdown-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 .trial-animate { animation: slide-in 0.5s ease-out; }
 .upgrade-btn-animate { animation: pulse 2s infinite; display: inline-block; }
 .sidebar-upgrade-animate { animation: glow 2s infinite; border-radius: 8px; }
@@ -225,14 +130,8 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
     <div class="login-box">
       <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:200px;margin-bottom:12px" alt="eMart IT"><br>
       <p>Client Dashboard — Sign in to manage your chatbot</p>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="login-email" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="Your password">
-      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password"></div>
       <button class="btn" onclick="doLogin()">Sign In</button>
       <div class="error-msg hidden" id="login-error">Invalid email or password.</div>
     </div>
@@ -248,6 +147,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         <p id="biz-name-sidebar">Loading...</p>
       </div>
       <div class="nav-item active" onclick="showPage('overview', this)">📊 <span>Overview</span></div>
+      <div class="nav-item" onclick="showPage('analytics', this)">📈 <span>Analytics</span></div>
       <div class="nav-item" onclick="showPage('settings', this)">⚙️ <span>Bot Settings</span></div>
       <div class="nav-item" onclick="showPage('branding', this)">🎨 <span>Branding</span></div>
       <div class="nav-item" onclick="showPage('preview', this)">💬 <span>Chat Preview</span></div>
@@ -256,23 +156,16 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div class="nav-item" onclick="showPage('advanced', this)">🔧 <span>Advanced</span></div>
       <div class="sidebar-bottom">
         <div id="sidebar-upgrade" style="display:none;padding:16px" class="sidebar-upgrade-animate">
-          <a href="https://www.emartit.com/subscribe" target="_blank"
-            style="display:block;background:linear-gradient(135deg,#f59e0b,#d97706);color:white;text-align:center;padding:10px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">
-            🚀 Upgrade to Paid →
-          </a>
+          <a href="https://www.emartit.com/subscribe" target="_blank" style="display:block;background:linear-gradient(135deg,#f59e0b,#d97706);color:white;text-align:center;padding:10px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🚀 Upgrade to Paid →</a>
         </div>
         <div class="nav-item" onclick="doLogout()">🚪 <span>Logout</span></div>
       </div>
     </div>
 
     <div class="main-content">
-      <!-- TOP BAR -->
       <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:20px;gap:12px">
         <div style="font-size:13px;color:#64748b" id="topbar-bizname"></div>
-        <button onclick="doLogout()"
-          style="background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
-          🚪 Logout
-        </button>
+        <button onclick="doLogout()" style="background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🚪 Logout</button>
       </div>
 
       <!-- OVERVIEW -->
@@ -283,10 +176,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         <div id="password-warning" style="display:none;background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin-bottom:20px">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
             <div style="font-size:20px">⚠️</div>
-            <div style="flex:1">
-              <div style="font-size:14px;font-weight:700;color:#92400e">You are using a temporary password</div>
-              <div style="font-size:12px;color:#78350f;margin-top:3px">For your security, please change your password now.</div>
-            </div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#92400e">You are using a temporary password</div><div style="font-size:12px;color:#78350f;margin-top:3px">For your security, please change your password now.</div></div>
             <button onclick="showChangePassword()" style="background:#f59e0b;color:white;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Change Password →</button>
           </div>
         </div>
@@ -309,11 +199,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
           <h3>🎬 How To Set Up Your Chatbot</h3>
           <p style="font-size:13px;color:#555;margin-bottom:16px">Watch this short video to learn how to set up and install your AI chatbot in minutes.</p>
           <div style="background:#1a1a2e;border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="playVideo()">
-            <div style="text-align:center;color:white">
-              <div style="font-size:48px;margin-bottom:8px">▶️</div>
-              <div style="font-size:14px;opacity:0.8">Click to watch setup tutorial</div>
-              <div style="font-size:12px;opacity:0.5;margin-top:4px">~5 minutes</div>
-            </div>
+            <div style="text-align:center;color:white"><div style="font-size:48px;margin-bottom:8px">▶️</div><div style="font-size:14px;opacity:0.8">Click to watch setup tutorial</div><div style="font-size:12px;opacity:0.5;margin-top:4px">~5 minutes</div></div>
           </div>
           <div id="video-player" style="display:none;margin-top:12px">
             <iframe id="video-iframe" width="100%" style="aspect-ratio:16/9;border-radius:10px;border:none" allowfullscreen></iframe>
@@ -332,11 +218,31 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         </div>
         <div class="card">
           <h3>Your Chatbot is Live</h3>
-          <p style="font-size:13px;color:#555">Your AI chatbot is active and ready to answer customer questions 24/7. Go to <strong>Embed Code</strong> to get the code for your website, or <strong>Chat Preview</strong> to test it.</p>
+          <p style="font-size:13px;color:#555">Your AI chatbot is active and ready to answer customer questions 24/7.</p>
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
             <button onclick="showPage('preview', null)" class="save-btn">💬 Test Chatbot</button>
             <button onclick="showPage('embed', null)" style="padding:10px 24px;background:#e8f0fb;color:#1a569a;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">🔗 Get Embed Code</button>
           </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS PAGE -->
+      <div id="page-analytics" class="hidden">
+        <div class="page-title">Analytics 📈</div>
+        <div class="page-sub">Your chatbot conversation data for the last 30 days</div>
+        <div class="stats-grid" style="margin-bottom:20px">
+          <div class="analytics-stat"><div class="num" id="an-total">—</div><div class="lbl">Total (30 days)</div></div>
+          <div class="analytics-stat"><div class="num" id="an-month">—</div><div class="lbl">This Month</div></div>
+          <div class="analytics-stat"><div class="num" id="an-today">—</div><div class="lbl">Today</div></div>
+          <div class="analytics-stat"><div class="num" id="an-best">—</div><div class="lbl">Best Day</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">💬 Conversations — Last 30 Days</div>
+          <canvas id="client-analytics-chart" height="80"></canvas>
+        </div>
+        <div class="card" style="background:linear-gradient(135deg,#e8f0fb,#f0f7ff)">
+          <h3 style="color:#1a569a">📊 What This Means For You</h3>
+          <p style="font-size:13px;color:#374151;line-height:1.7">Each conversation is a real visitor on your website who got help from your AI chatbot. More conversations mean more engaged visitors — and more potential customers. Your chatbot is working for you 24/7.</p>
         </div>
       </div>
 
@@ -365,27 +271,12 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <!-- BRANDING -->
       <div id="page-branding" class="hidden">
         <div class="page-title">Branding 🎨</div>
-        <div class="page-sub">Customize your chatbot to match your brand — changes show instantly in the preview below</div>
+        <div class="page-sub">Customize your chatbot to match your brand</div>
         <div class="card">
           <div class="settings-section-title">🎨 Colors</div>
-          <div class="field-group">
-            <label>Chat Header Color</label>
-            <div class="color-row">
-              <input type="color" id="b-header-color" value="#1a569a" oninput="updateBrandPreview()">
-              <input type="text" id="b-header-color-text" value="#1a569a" oninput="syncColorFromText('b-header-color', 'b-header-color-text')">
-            </div>
-          </div>
-          <div class="field-group">
-            <label>Chat Bubble Color</label>
-            <div class="color-row">
-              <input type="color" id="b-bubble-color" value="#1a569a" oninput="updateBrandPreview()">
-              <input type="text" id="b-bubble-color-text" value="#1a569a" oninput="syncColorFromText('b-bubble-color', 'b-bubble-color-text')">
-            </div>
-          </div>
-
-        <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
-
-          <!-- CUSTOM AVATAR UPLOAD -->
+          <div class="field-group"><label>Chat Header Color</label><div class="color-row"><input type="color" id="b-header-color" value="#1a569a" oninput="updateBrandPreview()"><input type="text" id="b-header-color-text" value="#1a569a" oninput="syncColorFromText('b-header-color', 'b-header-color-text')"></div></div>
+          <div class="field-group"><label>Chat Bubble Color</label><div class="color-row"><input type="color" id="b-bubble-color" value="#1a569a" oninput="updateBrandPreview()"><input type="text" id="b-bubble-color-text" value="#1a569a" oninput="syncColorFromText('b-bubble-color', 'b-bubble-color-text')"></div></div>
+          <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
           <div style="margin-bottom:16px;padding:16px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
             <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:8px">Upload Custom Logo / Photo</div>
             <div style="font-size:12px;color:#64748b;margin-bottom:12px">Upload your company logo or photo. This will replace the emoji avatar below.</div>
@@ -396,21 +287,14 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
               </div>
               <div style="flex:1">
                 <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
-                <button onclick="document.getElementById('avatar-file-input').click()"
-                  style="padding:8px 16px;background:#1a569a;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-right:8px">
-                  📷 Choose Image
-                </button>
-                <button onclick="removeCustomAvatar()" id="remove-avatar-btn" style="display:none;padding:8px 16px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">
-                  ✕ Remove
-                </button>
+                <button onclick="document.getElementById('avatar-file-input').click()" style="padding:8px 16px;background:#1a569a;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-right:8px">📷 Choose Image</button>
+                <button onclick="removeCustomAvatar()" id="remove-avatar-btn" style="display:none;padding:8px 16px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">✕ Remove</button>
                 <div style="font-size:11px;color:#94a3b8;margin-top:6px">JPG, PNG or GIF. Max 2MB. Will be cropped to circle.</div>
               </div>
             </div>
             <div id="avatar-upload-status" style="font-size:12px;margin-top:8px;display:none"></div>
           </div>
-
           <div style="font-size:12px;color:#94a3b8;margin-bottom:8px">Or choose an emoji avatar:</div>
-          <div class="settings-section-title" style="margin-top:20px">🤖 Bot Avatar</div>
           <div class="avatar-grid">
             <div class="avatar-option selected" data-avatar="robot" onclick="selectAvatar(this)">🤖</div>
             <div class="avatar-option" data-avatar="woman" onclick="selectAvatar(this)">👩</div>
@@ -429,28 +313,18 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <div class="position-option selected" id="pos-right" onclick="selectPosition('right')">Bottom Right →</div>
           </div>
           <div class="settings-section-title" style="margin-top:20px">👁 Live Preview</div>
-          <div class="widget-preview-wrap">
-            <div class="widget-bubble-preview" id="bubble-preview" style="right:16px;background:#1a569a">🤖</div>
-          </div>
+          <div class="widget-preview-wrap"><div class="widget-bubble-preview" id="bubble-preview" style="right:16px;background:#1a569a">🤖</div></div>
           <div style="margin-top:20px">
             <button class="save-btn" onclick="saveBranding()">Save Branding</button>
-            <div class="success-msg hidden" id="branding-saved">✅ Branding saved! Your chatbot will update within 1 minute.</div>
+            <div class="success-msg hidden" id="branding-saved">✅ Branding saved!</div>
           </div>
         </div>
         <div class="card">
           <h3>💬 Chat Preview With Your Branding</h3>
           <div class="chat-preview-wrap">
-            <div class="chat-header-preview" id="brand-chat-header" style="background:#1a569a">
-              <span id="brand-avatar-display">🤖</span>
-              <span id="brand-bot-name-display">Assistant</span>
-            </div>
-            <div class="chat-messages">
-              <div class="msg bot"><div class="msg-bubble" id="brand-welcome-bubble">Hi! How can I help you today? 😊</div></div>
-            </div>
-            <div class="chat-input-row">
-              <input type="text" placeholder="Type a message...">
-              <button id="brand-send-btn" style="background:#1a569a">Send</button>
-            </div>
+            <div class="chat-header-preview" id="brand-chat-header" style="background:#1a569a"><span id="brand-avatar-display">🤖</span><span id="brand-bot-name-display">Assistant</span></div>
+            <div class="chat-messages"><div class="msg bot"><div class="msg-bubble" id="brand-welcome-bubble">Hi! How can I help you today? 😊</div></div></div>
+            <div class="chat-input-row"><input type="text" placeholder="Type a message..."><button id="brand-send-btn" style="background:#1a569a">Send</button></div>
           </div>
         </div>
       </div>
@@ -461,17 +335,9 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
         <div class="page-sub">Test your chatbot — this is exactly what your customers will see</div>
         <div class="card">
           <div class="chat-preview-wrap">
-            <div class="chat-header-preview" id="preview-header" style="background:#1a569a">
-              <span id="preview-avatar">🤖</span>
-              <span id="preview-bot-name">Your Assistant</span>
-            </div>
-            <div class="chat-messages" id="preview-messages">
-              <div class="msg bot"><div class="msg-bubble">Hi! How can I help you today? 😊</div></div>
-            </div>
-            <div class="chat-input-row">
-              <input type="text" id="preview-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendPreview()">
-              <button id="preview-send-btn" onclick="sendPreview()" style="background:#1a569a">Send</button>
-            </div>
+            <div class="chat-header-preview" id="preview-header" style="background:#1a569a"><span id="preview-avatar">🤖</span><span id="preview-bot-name">Your Assistant</span></div>
+            <div class="chat-messages" id="preview-messages"><div class="msg bot"><div class="msg-bubble">Hi! How can I help you today? 😊</div></div></div>
+            <div class="chat-input-row"><input type="text" id="preview-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendPreview()"><button id="preview-send-btn" onclick="sendPreview()" style="background:#1a569a">Send</button></div>
           </div>
         </div>
       </div>
@@ -490,9 +356,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <h3 style="margin-bottom:0">All Leads</h3>
             <button onclick="exportLeads()" style="padding:8px 16px;background:#1a569a;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">⬇ Export CSV</button>
           </div>
-          <div id="leads-table-wrap">
-            <div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">Loading leads...</div>
-          </div>
+          <div id="leads-table-wrap"><div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">Loading leads...</div></div>
         </div>
       </div>
 
@@ -500,20 +364,12 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div id="page-advanced" class="hidden">
         <div class="page-title">Advanced Settings 🔧</div>
         <div class="page-sub">Lead capture, offline mode, quick replies and business hours</div>
-
         <div class="card">
           <h3>📬 Lead Capture</h3>
           <p style="font-size:13px;color:#555;margin-bottom:16px">When enabled, the chatbot will ask visitors for their contact info before the conversation starts.</p>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
-            <div>
-              <div style="font-size:14px;font-weight:700;color:#1a1a2e">Enable Lead Capture</div>
-              <div style="font-size:12px;color:#64748b;margin-top:2px">Bot will collect visitor info before chatting</div>
-            </div>
-            <label class="toggle-wrap">
-              <input type="checkbox" id="lead-capture-enabled">
-              <span class="toggle-bg"></span>
-              <span class="toggle-dot"></span>
-            </label>
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Enable Lead Capture</div><div style="font-size:12px;color:#64748b;margin-top:2px">Bot will collect visitor info before chatting</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="lead-capture-enabled"><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
           </div>
           <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:10px">Collect these fields:</div>
           <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px">
@@ -522,35 +378,21 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" id="lc-phone"> Phone Number</label>
           </div>
         </div>
-
         <div class="card">
           <h3>⚡ Quick Reply Buttons</h3>
           <p style="font-size:13px;color:#555;margin-bottom:4px">Add preset buttons that appear at the start of the conversation. Max 5 buttons.</p>
-          <p style="font-size:12px;color:#94a3b8;margin-bottom:16px">💡 Add an optional link to open a page when clicked (e.g. booking page, menu, etc.)</p>
-          <div id="quick-replies-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
-            <div style="font-size:13px;color:#94a3b8;padding:8px 0">No quick reply buttons added yet.</div>
-          </div>
+          <p style="font-size:12px;color:#94a3b8;margin-bottom:16px">💡 Add an optional link to open a page when clicked.</p>
+          <div id="quick-replies-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"><div style="font-size:13px;color:#94a3b8;padding:8px 0">No quick reply buttons added yet.</div></div>
           <button onclick="addQuickReply()" style="padding:8px 16px;background:#e8f0fb;color:#1a569a;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">+ Add Button</button>
         </div>
-
         <div class="card">
           <h3>🌙 Offline / Business Hours Mode</h3>
-          <p style="font-size:13px;color:#555;margin-bottom:16px">When enabled, the chatbot shows an offline message outside your business hours instead of answering with AI.</p>
+          <p style="font-size:13px;color:#555;margin-bottom:16px">When enabled, the chatbot shows an offline message outside your business hours.</p>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
-            <div>
-              <div style="font-size:14px;font-weight:700;color:#1a1a2e">Enable Business Hours Mode</div>
-              <div style="font-size:12px;color:#64748b;margin-top:2px">Bot goes offline outside your set hours</div>
-            </div>
-            <label class="toggle-wrap">
-              <input type="checkbox" id="offline-mode-enabled">
-              <span class="toggle-bg"></span>
-              <span class="toggle-dot"></span>
-            </label>
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Enable Business Hours Mode</div><div style="font-size:12px;color:#64748b;margin-top:2px">Bot goes offline outside your set hours</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="offline-mode-enabled"><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
           </div>
-          <div class="field-group">
-            <label>Offline Message</label>
-            <textarea id="offline-message" rows="2" placeholder="e.g. We are currently closed. Leave your details and we'll call you back!"></textarea>
-          </div>
+          <div class="field-group"><label>Offline Message</label><textarea id="offline-message" rows="2" placeholder="e.g. We are currently closed. Leave your details and we'll call you back!"></textarea></div>
           <div class="field-group">
             <label>Timezone</label>
             <select id="offline-timezone">
@@ -581,7 +423,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
             <div class="hours-row" id="hours-sunday"><span style="font-size:13px;font-weight:600">Sunday</span><input type="time" value="09:00"><input type="time" value="18:00"><input type="checkbox"></div>
           </div>
         </div>
-
         <button class="save-btn" onclick="saveAdvancedSettings()">Save All Advanced Settings</button>
         <div class="success-msg hidden" id="advanced-saved" style="margin-top:8px">✅ Advanced settings saved!</div>
       </div>
@@ -632,17 +473,12 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 const API = 'https://web-production-1c820.up.railway.app';
 let currentClientId = null;
 let currentClient = null;
-let currentBranding = {
-  headerColor: '#1a569a', bubbleColor: '#1a569a',
-  avatar: 'robot', position: 'right',
-  welcomeMessage: 'Hi! How can I help you today? 😊'
-};
-const AVATARS = {
-  robot:'🤖', woman:'👩', man:'👨', star:'⭐', chat:'💬',
-  heart:'❤️', lightning:'⚡', diamond:'💎', fire:'🔥', crown:'👑'
-};
+let currentBranding = { headerColor: '#1a569a', bubbleColor: '#1a569a', avatar: 'robot', position: 'right', welcomeMessage: 'Hi! How can I help you today? 😊' };
+const AVATARS = { robot:'🤖', woman:'👩', man:'👨', star:'⭐', chat:'💬', heart:'❤️', lightning:'⚡', diamond:'💎', fire:'🔥', crown:'👑' };
 let leadsData = [];
 let quickReplies = [];
+let clientAnalyticsChart = null;
+var customAvatarUrl = '';
 
 async function doLogin() {
   const email = document.getElementById('login-email').value;
@@ -651,10 +487,7 @@ async function doLogin() {
   errEl.classList.add('hidden');
   if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.classList.remove('hidden'); return; }
   try {
-    const res = await fetch(API + '/auth/login', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password})
-    });
+    const res = await fetch(API + '/auth/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, password}) });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || 'Login failed');
     currentClientId = data.client_id;
@@ -675,16 +508,14 @@ function showDashboard() {
   if (topbar) topbar.textContent = currentClient.business_name || '';
   loadSettings();
   loadUsage();
-  fetch(API + '/clients/' + currentClientId + '/trial-status')
-    .then(r => r.json())
-    .then(data => {
-      const el = document.getElementById('sidebar-upgrade');
-      if (el) el.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
-    }).catch(() => {});
+  fetch(API + '/clients/' + currentClientId + '/trial-status').then(r => r.json()).then(data => {
+    const el = document.getElementById('sidebar-upgrade');
+    if (el) el.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
+  }).catch(() => {});
 }
 
 function showPage(page, el) {
-  ['overview','settings','branding','preview','embed','leads','advanced'].forEach(p => {
+  ['overview','analytics','settings','branding','preview','embed','leads','advanced'].forEach(p => {
     document.getElementById('page-' + p).classList.add('hidden');
   });
   document.getElementById('page-' + page).classList.remove('hidden');
@@ -694,6 +525,47 @@ function showPage(page, el) {
   if (page === 'branding') loadBrandingPage();
   if (page === 'leads') loadLeads();
   if (page === 'advanced') loadAdvancedSettings();
+  if (page === 'analytics') loadClientAnalytics();
+}
+
+// ============ ANALYTICS ============
+async function loadClientAnalytics() {
+  try {
+    const res = await fetch(API + '/analytics/' + currentClientId);
+    const data = await res.json();
+    const daily = data.daily || [];
+    const total30 = daily.reduce((s,d) => s + d.conversations, 0);
+    const today = daily[daily.length-1]?.conversations || 0;
+    const best = Math.max(...daily.map(d => d.conversations), 0);
+    document.getElementById('an-total').textContent = total30;
+    document.getElementById('an-month').textContent = data.total_this_month || 0;
+    document.getElementById('an-today').textContent = today;
+    document.getElementById('an-best').textContent = best;
+    if (clientAnalyticsChart) clientAnalyticsChart.destroy();
+    const ctx = document.getElementById('client-analytics-chart').getContext('2d');
+    clientAnalyticsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: daily.map(d => d.label),
+        datasets: [{
+          label: 'Conversations',
+          data: daily.map(d => d.conversations),
+          backgroundColor: 'rgba(26,86,154,0.7)',
+          borderColor: '#1a569a',
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } },
+          x: { ticks: { maxTicksLimit: 10 } }
+        }
+      }
+    });
+  } catch(e) { console.log('Analytics error:', e); }
 }
 
 async function loadSettings() {
@@ -736,10 +608,10 @@ function loadBrandingPage() {
   document.getElementById('pos-right').classList.toggle('selected', currentBranding.position === 'right');
   updateBrandPreview();
   if (currentBranding.avatarUrl) {
-  customAvatarUrl = currentBranding.avatarUrl;
-  showAvatarPreview(currentBranding.avatarUrl, true);
-  document.getElementById('remove-avatar-btn').style.display = 'inline-block';
-}
+    customAvatarUrl = currentBranding.avatarUrl;
+    showAvatarPreview(currentBranding.avatarUrl, true);
+    document.getElementById('remove-avatar-btn').style.display = 'inline-block';
+  }
 }
 
 function updateBrandPreview() {
@@ -766,50 +638,29 @@ function syncColorFromText(colorId, textId) {
   if (/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById(colorId).value = val; updateBrandPreview(); }
 }
 
-  // ============ CUSTOM AVATAR UPLOAD ============
-var customAvatarUrl = '';
-
 function handleAvatarUpload(input) {
   const file = input.files[0];
   if (!file) return;
-  if (file.size > 2 * 1024 * 1024) {
-    alert('Image must be under 2MB');
-    return;
-  }
+  if (file.size > 2 * 1024 * 1024) { alert('Image must be under 2MB'); return; }
   const statusEl = document.getElementById('avatar-upload-status');
-  statusEl.style.display = 'block';
-  statusEl.style.color = '#64748b';
-  statusEl.textContent = '⏳ Uploading...';
+  statusEl.style.display = 'block'; statusEl.style.color = '#64748b'; statusEl.textContent = '⏳ Uploading...';
   const reader = new FileReader();
   reader.onload = async function(e) {
     const base64 = e.target.result;
     try {
       const res = await fetch(API + '/clients/upload-avatar?client_id=' + currentClientId, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          image_data: base64,
-          file_name: file.name,
-          content_type: file.type
-        })
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ image_data: base64, file_name: file.name, content_type: file.type })
       });
       const data = await res.json();
       if (data.success) {
         customAvatarUrl = data.url;
         showAvatarPreview(base64, true);
-        statusEl.style.color = '#166534';
-        statusEl.textContent = '✅ Avatar uploaded successfully!';
+        statusEl.style.color = '#166534'; statusEl.textContent = '✅ Avatar uploaded successfully!';
         document.getElementById('remove-avatar-btn').style.display = 'inline-block';
-        // Deselect emoji avatars
         document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-      } else {
-        statusEl.style.color = '#dc2626';
-        statusEl.textContent = '❌ Upload failed. Please try again.';
-      }
-    } catch(e) {
-      statusEl.style.color = '#dc2626';
-      statusEl.textContent = '❌ Error: ' + e.message;
-    }
+      } else { statusEl.style.color = '#dc2626'; statusEl.textContent = '❌ Upload failed.'; }
+    } catch(e) { statusEl.style.color = '#dc2626'; statusEl.textContent = '❌ Error: ' + e.message; }
   };
   reader.readAsDataURL(file);
 }
@@ -817,14 +668,8 @@ function handleAvatarUpload(input) {
 function showAvatarPreview(src, isCustom) {
   const emojiEl = document.getElementById('avatar-preview-emoji');
   const imgEl = document.getElementById('avatar-preview-img');
-  if (isCustom && src) {
-    emojiEl.style.display = 'none';
-    imgEl.style.display = 'block';
-    imgEl.src = src;
-  } else {
-    emojiEl.style.display = 'block';
-    imgEl.style.display = 'none';
-  }
+  if (isCustom && src) { emojiEl.style.display = 'none'; imgEl.style.display = 'block'; imgEl.src = src; }
+  else { emojiEl.style.display = 'block'; imgEl.style.display = 'none'; }
 }
 
 function removeCustomAvatar() {
@@ -835,26 +680,19 @@ function removeCustomAvatar() {
   document.getElementById('remove-avatar-btn').style.display = 'none';
   document.getElementById('avatar-upload-status').style.display = 'none';
   document.getElementById('avatar-file-input').value = '';
-  // Re-select first emoji
   const firstAvatar = document.querySelector('.avatar-option');
-  if (firstAvatar) {
-    firstAvatar.classList.add('selected');
-    currentBranding.avatar = firstAvatar.dataset.avatar;
-  }
+  if (firstAvatar) { firstAvatar.classList.add('selected'); currentBranding.avatar = firstAvatar.dataset.avatar; }
 }
-  
+
 function selectAvatar(el) {
   document.querySelectorAll('.avatar-option').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-  currentBranding.avatar = el.dataset.avatar;
-  updateBrandPreview();
+  el.classList.add('selected'); currentBranding.avatar = el.dataset.avatar; updateBrandPreview();
 }
 
 function selectPosition(pos) {
   document.getElementById('pos-left').classList.toggle('selected', pos === 'left');
   document.getElementById('pos-right').classList.toggle('selected', pos === 'right');
-  currentBranding.position = pos;
-  updateBrandPreview();
+  currentBranding.position = pos; updateBrandPreview();
 }
 
 function applyBrandingToPreview() {
@@ -891,7 +729,7 @@ async function saveBranding() {
         bot_color: bubbleColor, bubble_color: bubbleColor, header_color: headerColor,
         chat_position: position, bot_avatar: avatarKey, welcome_message: welcomeMsg,
         custom_prompt: document.getElementById('s-custom')?.value || '',
-        bot_avatar_url: customAvatarUrl || '',
+        bot_avatar_url: customAvatarUrl || ''
       })
     });
     if (res.ok) {
@@ -946,10 +784,7 @@ async function loadUsage() {
       document.getElementById('stat-convos').textContent = u.conversation_count || 0;
       const charge = Math.max((u.conversation_count || 0) * 0.07, 10);
       document.getElementById('stat-charge').textContent = '$' + charge.toFixed(2);
-    } else {
-      document.getElementById('stat-convos').textContent = '0';
-      document.getElementById('stat-charge').textContent = '$10.00';
-    }
+    } else { document.getElementById('stat-convos').textContent = '0'; document.getElementById('stat-charge').textContent = '$10.00'; }
     const accountType = trialData.account_type;
     const trialBanner = document.getElementById('trial-banner');
     if (accountType === 'trial') {
@@ -962,41 +797,36 @@ async function loadUsage() {
       const urgentColor = daysLeft === 0 ? '#dc2626' : daysLeft === 1 ? '#f59e0b' : '#1a56a0';
       trialBanner.style.display = 'block';
       trialBanner.className = 'trial-animate';
-      trialBanner.innerHTML = `
-        <div style="background:white;border:2px solid ${urgentColor};border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.1)">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:${urgentColor};text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🎯 Free Trial Active</div>
-              <div class="countdown-animate" style="font-size:28px;font-weight:700;color:${urgentColor}">${daysLeft} days ${hoursLeft % 24} hours remaining</div>
-              <div style="font-size:13px;color:#64748b;margin-top:6px">Expires on ${new Date(trialData.trial_end).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
-            </div>
-            <div style="text-align:center;background:#f8fafc;border-radius:10px;padding:16px 24px;min-width:160px">
-              <div style="font-size:32px;font-weight:700;color:${urgentColor}">${convosLeft}</div>
-              <div style="font-size:12px;color:#64748b;font-weight:600">conversations left</div>
-              <div style="font-size:11px;color:#94a3b8;margin-top:2px">${convosUsed} of ${convosLimit} used</div>
-            </div>
+      trialBanner.innerHTML = `<div style="background:white;border:2px solid ${urgentColor};border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.1)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+          <div><div style="font-size:11px;font-weight:700;color:${urgentColor};text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🎯 Free Trial Active</div>
+          <div class="countdown-animate" style="font-size:28px;font-weight:700;color:${urgentColor}">${daysLeft} days ${hoursLeft % 24} hours remaining</div>
+          <div style="font-size:13px;color:#64748b;margin-top:6px">Expires on ${new Date(trialData.trial_end).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div>
+          <div style="text-align:center;background:#f8fafc;border-radius:10px;padding:16px 24px;min-width:160px">
+            <div style="font-size:32px;font-weight:700;color:${urgentColor}">${convosLeft}</div>
+            <div style="font-size:12px;color:#64748b;font-weight:600">conversations left</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:2px">${convosUsed} of ${convosLimit} used</div>
           </div>
-          <div style="margin-top:16px">
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:6px"><span>Trial usage</span><span>${Math.round(pct)}% used</span></div>
-            <div style="background:#e5e7eb;border-radius:8px;height:10px"><div style="background:${urgentColor};border-radius:8px;height:10px;width:${pct}%"></div></div>
-          </div>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-            <div style="font-size:13px;color:#64748b">Enjoying the chatbot? Upgrade to keep it running.</div>
-            <a href="https://www.emartit.com/subscribe" target="_blank" class="upgrade-btn-animate" style="background:#1a56a0;color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;display:inline-block">🚀 Upgrade to Paid Plan →</a>
-          </div>
-        </div>`;
+        </div>
+        <div style="margin-top:16px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:6px"><span>Trial usage</span><span>${Math.round(pct)}% used</span></div>
+          <div style="background:#e5e7eb;border-radius:8px;height:10px"><div style="background:${urgentColor};border-radius:8px;height:10px;width:${pct}%"></div></div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div style="font-size:13px;color:#64748b">Enjoying the chatbot? Upgrade to keep it running.</div>
+          <a href="https://www.emartit.com/subscribe" target="_blank" class="upgrade-btn-animate" style="background:#1a56a0;color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;display:inline-block">🚀 Upgrade to Paid Plan →</a>
+        </div>
+      </div>`;
       document.getElementById('stat-status').textContent = '🎯';
       document.getElementById('stat-status-lbl').textContent = 'Trial Account';
     } else if (accountType === 'expired') {
       trialBanner.style.display = 'block';
-      trialBanner.className = 'trial-animate';
-      trialBanner.innerHTML = `
-        <div style="background:#fee2e2;border:2px solid #dc2626;border-radius:14px;padding:24px;text-align:center">
-          <div style="font-size:32px;margin-bottom:12px">❌</div>
-          <div style="font-size:20px;font-weight:700;color:#991b1b;margin-bottom:8px">Your Free Trial Has Ended</div>
-          <div style="font-size:14px;color:#7f1d1d;margin-bottom:20px">Your chatbot is currently inactive. Subscribe now to restore access.</div>
-          <a href="https://www.emartit.com/subscribe" target="_blank" class="upgrade-btn-animate" style="background:#dc2626;color:white;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block">Subscribe Now →</a>
-        </div>`;
+      trialBanner.innerHTML = `<div style="background:#fee2e2;border:2px solid #dc2626;border-radius:14px;padding:24px;text-align:center">
+        <div style="font-size:32px;margin-bottom:12px">❌</div>
+        <div style="font-size:20px;font-weight:700;color:#991b1b;margin-bottom:8px">Your Free Trial Has Ended</div>
+        <div style="font-size:14px;color:#7f1d1d;margin-bottom:20px">Your chatbot is currently inactive.</div>
+        <a href="https://www.emartit.com/subscribe" target="_blank" class="upgrade-btn-animate" style="background:#dc2626;color:white;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;text-decoration:none;display:inline-block">Subscribe Now →</a>
+      </div>`;
       document.getElementById('stat-status').textContent = '❌';
       document.getElementById('stat-status-lbl').textContent = 'Trial Expired';
     } else {
@@ -1010,7 +840,6 @@ async function loadUsage() {
   } catch(e) { console.log('Usage load error:', e); }
 }
 
-// ============ LEADS ============
 async function loadLeads() {
   try {
     const res = await fetch(API + '/leads/' + currentClientId);
@@ -1019,7 +848,7 @@ async function loadLeads() {
     renderLeadsTable();
     updateLeadsStats();
   } catch(e) {
-    document.getElementById('leads-table-wrap').innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8">Enable Lead Capture in Advanced Settings to start collecting leads.</div>';
+    document.getElementById('leads-table-wrap').innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8">Enable Lead Capture in Advanced Settings.</div>';
     document.getElementById('leads-total').textContent = '0';
     document.getElementById('leads-today').textContent = '0';
     document.getElementById('leads-week').textContent = '0';
@@ -1029,99 +858,63 @@ async function loadLeads() {
 function updateLeadsStats() {
   document.getElementById('leads-total').textContent = leadsData.length;
   const today = new Date().toDateString();
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
   document.getElementById('leads-today').textContent = leadsData.filter(l => new Date(l.created_at).toDateString() === today).length;
   document.getElementById('leads-week').textContent = leadsData.filter(l => new Date(l.created_at) >= weekAgo).length;
 }
 
 function renderLeadsTable() {
   const wrap = document.getElementById('leads-table-wrap');
-  if (leadsData.length === 0) {
-    wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">No leads yet. Enable Lead Capture in Advanced Settings.</div>';
-    return;
-  }
-  wrap.innerHTML = `
-    <table class="leads-table">
-      <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Date</th></tr></thead>
-      <tbody>${leadsData.map(l => `
-        <tr>
-          <td><strong>${l.visitor_name || '—'}</strong></td>
-          <td>${l.visitor_email || '—'}</td>
-          <td>${l.visitor_phone || '—'}</td>
-          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.message || '—'}</td>
-          <td style="white-space:nowrap;color:#64748b;font-size:12px">${new Date(l.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
-        </tr>`).join('')}
-      </tbody>
-    </table>`;
+  if (leadsData.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">No leads yet. Enable Lead Capture in Advanced Settings.</div>'; return; }
+  wrap.innerHTML = `<table class="leads-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Date</th></tr></thead><tbody>${leadsData.map(l => `
+    <tr><td><strong>${l.visitor_name||'—'}</strong></td><td>${l.visitor_email||'—'}</td><td>${l.visitor_phone||'—'}</td>
+    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.message||'—'}</td>
+    <td style="white-space:nowrap;color:#64748b;font-size:12px">${new Date(l.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table>`;
 }
 
 function exportLeads() {
   if (leadsData.length === 0) { alert('No leads to export yet.'); return; }
   let csv = 'Name,Email,Phone,Message,Date\n';
-  leadsData.forEach(l => {
-    csv += `"${l.visitor_name||''}","${l.visitor_email||''}","${l.visitor_phone||''}","${l.message||''}","${new Date(l.created_at).toLocaleString()}"\n`;
-  });
+  leadsData.forEach(l => { csv += `"${l.visitor_name||''}","${l.visitor_email||''}","${l.visitor_phone||''}","${l.message||''}","${new Date(l.created_at).toLocaleString()}"\n`; });
   const blob = new Blob([csv], {type:'text/csv'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'leads.csv'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='leads.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
-// ============ QUICK REPLIES ============
 function addQuickReply() {
   if (quickReplies.length >= 5) { alert('Maximum 5 quick reply buttons allowed.'); return; }
-  quickReplies.push({text: '', link: ''});
-  renderQuickReplies();
+  quickReplies.push({text:'',link:''}); renderQuickReplies();
 }
 
-function removeQuickReply(index) {
-  quickReplies.splice(index, 1);
-  renderQuickReplies();
-}
+function removeQuickReply(index) { quickReplies.splice(index,1); renderQuickReplies(); }
 
 function updateQuickReply(index, field, value) {
-  if (typeof quickReplies[index] === 'string') {
-    quickReplies[index] = {text: quickReplies[index], link: ''};
-  }
+  if (typeof quickReplies[index] === 'string') quickReplies[index] = {text:quickReplies[index],link:''};
   quickReplies[index][field] = value;
 }
 
 function renderQuickReplies() {
   const list = document.getElementById('quick-replies-list');
-  if (quickReplies.length === 0) {
-    list.innerHTML = '<div style="font-size:13px;color:#94a3b8;padding:8px 0">No quick reply buttons added yet.</div>';
-    return;
-  }
-  list.innerHTML = quickReplies.map((qr, i) => {
-    const text = typeof qr === 'object' ? (qr.text || '') : qr;
-    const link = typeof qr === 'object' ? (qr.link || '') : '';
-    return `
-      <div class="qr-row">
-        <div style="flex:2;min-width:140px">
-          <span class="qr-label">Button Text</span>
-          <input type="text" class="qr-text" value="${text}" placeholder="e.g. Book Appointment"
-            oninput="updateQuickReply(${i}, 'text', this.value)">
-        </div>
-        <div style="flex:3;min-width:180px">
-          <span class="qr-label">Link URL (optional)</span>
-          <input type="text" class="qr-link" value="${link}" placeholder="e.g. https://yoursite.com/booking"
-            oninput="updateQuickReply(${i}, 'link', this.value)">
-        </div>
-        <button onclick="removeQuickReply(${i})"
-          style="padding:8px 12px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-weight:700;align-self:flex-end">✕</button>
-      </div>`;
+  if (quickReplies.length === 0) { list.innerHTML = '<div style="font-size:13px;color:#94a3b8;padding:8px 0">No quick reply buttons added yet.</div>'; return; }
+  list.innerHTML = quickReplies.map((qr,i) => {
+    const text = typeof qr==='object'?(qr.text||''):qr;
+    const link = typeof qr==='object'?(qr.link||''):'';
+    return `<div class="qr-row">
+      <div style="flex:2;min-width:140px"><span class="qr-label">Button Text</span><input type="text" class="qr-text" value="${text}" placeholder="e.g. Book Appointment" oninput="updateQuickReply(${i},'text',this.value)"></div>
+      <div style="flex:3;min-width:180px"><span class="qr-label">Link URL (optional)</span><input type="text" class="qr-link" value="${link}" placeholder="e.g. https://yoursite.com/booking" oninput="updateQuickReply(${i},'link',this.value)"></div>
+      <button onclick="removeQuickReply(${i})" style="padding:8px 12px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-weight:700;align-self:flex-end">✕</button>
+    </div>`;
   }).join('');
 }
 
-// ============ BUSINESS HOURS ============
 function getBusinessHours() {
   const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
   const hours = {};
   days.forEach(day => {
-    const row = document.getElementById('hours-' + day);
+    const row = document.getElementById('hours-'+day);
     const inputs = row.querySelectorAll('input');
-    hours[day] = { open: inputs[0].value, close: inputs[1].value, enabled: inputs[2].checked };
+    hours[day] = {open:inputs[0].value, close:inputs[1].value, enabled:inputs[2].checked};
   });
   return hours;
 }
@@ -1129,32 +922,28 @@ function getBusinessHours() {
 function setBusinessHours(hours) {
   if (!hours) return;
   Object.keys(hours).forEach(day => {
-    const row = document.getElementById('hours-' + day);
+    const row = document.getElementById('hours-'+day);
     if (!row) return;
     const inputs = row.querySelectorAll('input');
-    inputs[0].value = hours[day].open || '09:00';
-    inputs[1].value = hours[day].close || '18:00';
-    inputs[2].checked = hours[day].enabled || false;
+    inputs[0].value = hours[day].open||'09:00';
+    inputs[1].value = hours[day].close||'18:00';
+    inputs[2].checked = hours[day].enabled||false;
   });
 }
 
-// ============ ADVANCED SETTINGS ============
 async function loadAdvancedSettings() {
   try {
     const res = await fetch(API + '/clients/' + currentClientId + '/settings');
     const data = await res.json();
     const s = data.settings || {};
-    document.getElementById('lead-capture-enabled').checked = s.lead_capture_enabled || false;
-    document.getElementById('lc-name').checked = s.lead_capture_name !== false;
-    document.getElementById('lc-email').checked = s.lead_capture_email || false;
-    document.getElementById('lc-phone').checked = s.lead_capture_phone || false;
-    // Normalize quick replies to objects
-    quickReplies = (s.quick_replies || []).map(qr =>
-      typeof qr === 'string' ? {text: qr, link: ''} : {text: qr.text || '', link: qr.link || ''}
-    );
+    document.getElementById('lead-capture-enabled').checked = s.lead_capture_enabled||false;
+    document.getElementById('lc-name').checked = s.lead_capture_name!==false;
+    document.getElementById('lc-email').checked = s.lead_capture_email||false;
+    document.getElementById('lc-phone').checked = s.lead_capture_phone||false;
+    quickReplies = (s.quick_replies||[]).map(qr => typeof qr==='string'?{text:qr,link:''}:{text:qr.text||'',link:qr.link||''});
     renderQuickReplies();
-    document.getElementById('offline-mode-enabled').checked = s.offline_mode_enabled || false;
-    document.getElementById('offline-message').value = s.offline_message || 'We are currently closed. Please leave your details and we will get back to you!';
+    document.getElementById('offline-mode-enabled').checked = s.offline_mode_enabled||false;
+    document.getElementById('offline-message').value = s.offline_message||'We are currently closed. Please leave your details and we will get back to you!';
     if (s.timezone) document.getElementById('offline-timezone').value = s.timezone;
     if (s.business_hours) setBusinessHours(s.business_hours);
   } catch(e) { console.log('Advanced settings load error:', e); }
@@ -1162,11 +951,9 @@ async function loadAdvancedSettings() {
 
 async function saveAdvancedSettings() {
   try {
-    const cleanedReplies = quickReplies
-      .map(qr => typeof qr === 'string' ? {text: qr, link: ''} : {text: qr.text || '', link: qr.link || ''})
-      .filter(qr => qr.text.trim() !== '');
-    const res = await fetch(API + '/clients/offline-settings', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
+    const cleanedReplies = quickReplies.map(qr=>typeof qr==='string'?{text:qr,link:''}:{text:qr.text||'',link:qr.link||''}).filter(qr=>qr.text.trim()!=='');
+    const res = await fetch(API+'/clients/offline-settings', {
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         client_id: currentClientId,
         lead_capture_enabled: document.getElementById('lead-capture-enabled').checked,
@@ -1180,10 +967,7 @@ async function saveAdvancedSettings() {
         quick_replies: cleanedReplies
       })
     });
-    if (res.ok) {
-      document.getElementById('advanced-saved').classList.remove('hidden');
-      setTimeout(() => document.getElementById('advanced-saved').classList.add('hidden'), 3000);
-    }
+    if (res.ok) { document.getElementById('advanced-saved').classList.remove('hidden'); setTimeout(()=>document.getElementById('advanced-saved').classList.add('hidden'),3000); }
   } catch(e) { console.log('Save advanced error:', e); }
 }
 
@@ -1202,10 +986,7 @@ async function sendPreview() {
   messagesEl.innerHTML += `<div class="msg bot" id="typing"><div class="msg-bubble">Typing...</div></div>`;
   messagesEl.scrollTop = messagesEl.scrollHeight;
   try {
-    const res = await fetch(API + '/chat', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({client_id: currentClientId, message: msg, conversation_history: []})
-    });
+    const res = await fetch(API+'/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({client_id:currentClientId, message:msg, conversation_history:[]}) });
     const data = await res.json();
     document.getElementById('typing').remove();
     messagesEl.innerHTML += `<div class="msg bot"><div class="msg-bubble">${data.reply}</div></div>`;
@@ -1225,14 +1006,14 @@ function copyEmbed() {
   const code = document.getElementById('embed-code-display').textContent;
   navigator.clipboard.writeText(code);
   document.getElementById('copy-success').classList.remove('hidden');
-  setTimeout(() => document.getElementById('copy-success').classList.add('hidden'), 2000);
+  setTimeout(()=>document.getElementById('copy-success').classList.add('hidden'),2000);
 }
 
 function showChangePassword() {
   document.getElementById('password-modal').classList.add('open');
   document.getElementById('pw-error').style.display = 'none';
   document.getElementById('pw-success').style.display = 'none';
-  ['pw-current','pw-new','pw-confirm'].forEach(id => document.getElementById(id).value = '');
+  ['pw-current','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value='');
 }
 
 function closePasswordModal() { document.getElementById('password-modal').classList.remove('open'); }
@@ -1243,51 +1024,38 @@ async function changePassword() {
   const confirm = document.getElementById('pw-confirm').value;
   const errEl = document.getElementById('pw-error');
   const sucEl = document.getElementById('pw-success');
-  errEl.style.display = 'none'; sucEl.style.display = 'none';
-  if (!current || !newPw || !confirm) { errEl.textContent = 'Please fill in all fields.'; errEl.style.display = 'block'; return; }
-  if (newPw.length < 8) { errEl.textContent = 'New password must be at least 8 characters.'; errEl.style.display = 'block'; return; }
-  if (newPw !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.style.display = 'block'; return; }
+  errEl.style.display='none'; sucEl.style.display='none';
+  if (!current||!newPw||!confirm) { errEl.textContent='Please fill in all fields.'; errEl.style.display='block'; return; }
+  if (newPw.length<8) { errEl.textContent='New password must be at least 8 characters.'; errEl.style.display='block'; return; }
+  if (newPw!==confirm) { errEl.textContent='Passwords do not match.'; errEl.style.display='block'; return; }
   try {
     const email = localStorage.getItem('emartit_login_email');
-    const verifyRes = await fetch(API + '/auth/login', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password: current})
-    });
-    if (!verifyRes.ok) { errEl.textContent = 'Current password is incorrect.'; errEl.style.display = 'block'; return; }
-    const updateRes = await fetch(API + '/auth/change-password', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({client_id: currentClientId, email, new_password: newPw})
-    });
+    const verifyRes = await fetch(API+'/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, password:current}) });
+    if (!verifyRes.ok) { errEl.textContent='Current password is incorrect.'; errEl.style.display='block'; return; }
+    const updateRes = await fetch(API+'/auth/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({client_id:currentClientId, email, new_password:newPw}) });
     if (updateRes.ok) {
-      sucEl.textContent = '✅ Password changed successfully!';
-      sucEl.style.display = 'block';
-      localStorage.setItem('emartit_password_changed_' + currentClientId, 'true');
-      document.getElementById('password-warning').style.display = 'none';
-      setTimeout(() => closePasswordModal(), 2000);
-    } else { errEl.textContent = 'Failed to update password.'; errEl.style.display = 'block'; }
-  } catch(e) { errEl.textContent = 'Error: ' + e.message; errEl.style.display = 'block'; }
+      sucEl.textContent='✅ Password changed successfully!'; sucEl.style.display='block';
+      localStorage.setItem('emartit_password_changed_'+currentClientId,'true');
+      document.getElementById('password-warning').style.display='none';
+      setTimeout(()=>closePasswordModal(),2000);
+    } else { errEl.textContent='Failed to update password.'; errEl.style.display='block'; }
+  } catch(e) { errEl.textContent='Error: '+e.message; errEl.style.display='block'; }
 }
 
 function doLogout() {
   localStorage.removeItem('emartit_client_id');
   localStorage.removeItem('emartit_client');
   localStorage.removeItem('emartit_login_email');
-  currentClientId = null; currentClient = null;
+  currentClientId=null; currentClient=null;
   document.getElementById('dashboard-page').classList.add('hidden');
   document.getElementById('login-page').classList.remove('hidden');
 }
 
-document.getElementById('password-modal').addEventListener('click', function(e) {
-  if (e.target === this) closePasswordModal();
-});
+document.getElementById('password-modal').addEventListener('click', function(e) { if (e.target===this) closePasswordModal(); });
 
 const savedId = localStorage.getItem('emartit_client_id');
 const savedClient = localStorage.getItem('emartit_client');
-if (savedId && savedClient) {
-  currentClientId = savedId;
-  currentClient = JSON.parse(savedClient);
-  showDashboard();
-}
+if (savedId && savedClient) { currentClientId=savedId; currentClient=JSON.parse(savedClient); showDashboard(); }
 </script>
 </body>
 </html>
