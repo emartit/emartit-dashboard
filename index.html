@@ -105,7 +105,6 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .qr-text { flex:2; min-width:140px; }
 .qr-link { flex:3; min-width:180px; }
 .qr-label { font-size:10px; color:#94a3b8; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px; }
-/* ANALYTICS */
 .analytics-stat { background: white; border-radius: 12px; padding: 20px 24px; border: 1px solid #e5e7eb; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 .analytics-stat .num { font-size: 36px; font-weight: 700; color: #1a569a; }
 .analytics-stat .lbl { font-size: 12px; color: #64748b; margin-top: 4px; font-weight: 600; }
@@ -124,6 +123,39 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 </head>
 <body>
 
+<!-- FORGOT PASSWORD MODAL -->
+<div id="forgotModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:16px; padding:36px; width:90%; max-width:420px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="height:40px; display:block; margin:0 auto 20px;">
+    <h3 style="text-align:center; color:#1a1a2e; margin-bottom:8px; font-size:18px;">Reset Your Password</h3>
+    <p style="text-align:center; color:#666; font-size:13px; margin-bottom:20px;">Enter your email and we'll send you a reset link.</p>
+    <div id="forgotEmailStep">
+      <input type="email" id="forgotEmailInput" placeholder="your@email.com" style="width:100%; padding:12px 16px; border:1.5px solid #e0e8f0; border-radius:10px; font-size:14px; box-sizing:border-box; margin-bottom:12px; outline:none;">
+      <div id="forgotError" style="color:#c73e1d; font-size:12px; margin-bottom:10px; display:none;"></div>
+      <button onclick="submitForgotPassword()" style="width:100%; padding:13px; background:#1a569a; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer;">Send Reset Link</button>
+    </div>
+    <div id="forgotSuccessStep" style="display:none; text-align:center;">
+      <div style="font-size:48px; margin-bottom:16px;">📧</div>
+      <p style="color:#333; font-size:14px; line-height:1.6;">Reset link sent! Check your email and click the link to set a new password.<br><br>The link expires in <strong>1 hour</strong>.</p>
+    </div>
+    <button onclick="closeForgotModal()" style="width:100%; padding:11px; background:transparent; color:#888; border:1px solid #e0e8f0; border-radius:10px; font-size:13px; cursor:pointer; margin-top:12px;">Close</button>
+  </div>
+</div>
+
+<!-- RESET PASSWORD MODAL -->
+<div id="resetModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:16px; padding:36px; width:90%; max-width:420px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="height:40px; display:block; margin:0 auto 20px;">
+    <h3 style="text-align:center; color:#1a1a2e; margin-bottom:8px; font-size:18px;">Set New Password</h3>
+    <p style="text-align:center; color:#666; font-size:13px; margin-bottom:20px;">Enter your new password below.</p>
+    <input type="password" id="resetNewPassword" placeholder="New password (min 6 characters)" style="width:100%; padding:12px 16px; border:1.5px solid #e0e8f0; border-radius:10px; font-size:14px; box-sizing:border-box; margin-bottom:10px; outline:none;">
+    <input type="password" id="resetConfirmPassword" placeholder="Confirm new password" style="width:100%; padding:12px 16px; border:1.5px solid #e0e8f0; border-radius:10px; font-size:14px; box-sizing:border-box; margin-bottom:12px; outline:none;">
+    <div id="resetError" style="color:#c73e1d; font-size:12px; margin-bottom:10px; display:none;"></div>
+    <div id="resetSuccess" style="color:#2a8a55; font-size:12px; margin-bottom:10px; display:none;">✅ Password updated! You can now log in.</div>
+    <button onclick="submitResetPassword()" style="width:100%; padding:13px; background:#1a569a; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer;">Update Password</button>
+  </div>
+</div>
+
 <!-- LOGIN PAGE -->
 <div id="login-page">
   <div class="login-wrap">
@@ -131,8 +163,11 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <img src="https://assets.cdn.filesafe.space/gc3cLEwwg5coVvb6yiOD/media/6a0d91c507a34aa07f7ae15e.png" style="width:200px;margin-bottom:12px" alt="eMart IT"><br>
       <p>Client Dashboard — Sign in to manage your chatbot</p>
       <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com"></div>
-      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="Your password" onkeypress="if(event.key==='Enter')doLogin()"></div>
       <button class="btn" onclick="doLogin()">Sign In</button>
+      <div style="text-align:center; margin-top:12px;">
+        <a href="#" onclick="showForgotPassword()" style="font-size:13px; color:#1a569a; text-decoration:none;">Forgot your password?</a>
+      </div>
       <div class="error-msg hidden" id="login-error">Invalid email or password.</div>
     </div>
   </div>
@@ -453,7 +488,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
   </div>
 </div>
 
-<!-- PASSWORD MODAL -->
+<!-- PASSWORD CHANGE MODAL -->
 <div class="modal-overlay" id="password-modal">
   <div class="modal-box">
     <h3>🔐 Change Your Password</h3>
@@ -495,6 +530,7 @@ async function doLogin() {
     localStorage.setItem('emartit_client_id', currentClientId);
     localStorage.setItem('emartit_client', JSON.stringify(currentClient));
     localStorage.setItem('emartit_login_email', email);
+    resetInactivityTimer();
     showDashboard();
   } catch(e) { errEl.textContent = e.message; errEl.classList.remove('hidden'); }
 }
@@ -528,7 +564,6 @@ function showPage(page, el) {
   if (page === 'analytics') loadClientAnalytics();
 }
 
-// ============ ANALYTICS ============
 async function loadClientAnalytics() {
   try {
     const res = await fetch(API + '/analytics/' + currentClientId);
@@ -1043,6 +1078,7 @@ async function changePassword() {
 }
 
 function doLogout() {
+  clearTimeout(inactivityTimer);
   localStorage.removeItem('emartit_client_id');
   localStorage.removeItem('emartit_client');
   localStorage.removeItem('emartit_login_email');
@@ -1053,9 +1089,108 @@ function doLogout() {
 
 document.getElementById('password-modal').addEventListener('click', function(e) { if (e.target===this) closePasswordModal(); });
 
+// ============================================
+// FORGOT / RESET PASSWORD
+// ============================================
+function showForgotPassword() {
+  document.getElementById('forgotModal').style.display = 'flex';
+}
+function closeForgotModal() {
+  document.getElementById('forgotModal').style.display = 'none';
+  document.getElementById('forgotEmailStep').style.display = 'block';
+  document.getElementById('forgotSuccessStep').style.display = 'none';
+  document.getElementById('forgotEmailInput').value = '';
+  document.getElementById('forgotError').style.display = 'none';
+}
+async function submitForgotPassword() {
+  const email = document.getElementById('forgotEmailInput').value.trim();
+  const errEl = document.getElementById('forgotError');
+  errEl.style.display = 'none';
+  if (!email) { errEl.textContent = 'Please enter your email.'; errEl.style.display = 'block'; return; }
+  try {
+    await fetch(API + '/auth/forgot-password', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email})
+    });
+    document.getElementById('forgotEmailStep').style.display = 'none';
+    document.getElementById('forgotSuccessStep').style.display = 'block';
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+  }
+}
+
+function checkResetToken() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('reset_token');
+  if (token) {
+    window.pendingResetToken = token;
+    document.getElementById('resetModal').style.display = 'flex';
+  }
+}
+async function submitResetPassword() {
+  const newPass = document.getElementById('resetNewPassword').value;
+  const confirmPass = document.getElementById('resetConfirmPassword').value;
+  const errEl = document.getElementById('resetError');
+  const successEl = document.getElementById('resetSuccess');
+  errEl.style.display = 'none';
+  if (!newPass || newPass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'block'; return; }
+  if (newPass !== confirmPass) { errEl.textContent = 'Passwords do not match.'; errEl.style.display = 'block'; return; }
+  try {
+    const res = await fetch(API + '/auth/reset-password', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({token: window.pendingResetToken, new_password: newPass})
+    });
+    const data = await res.json();
+    if (data.success) {
+      successEl.style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('resetModal').style.display = 'none';
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 2500);
+    } else {
+      errEl.textContent = data.detail || 'Reset failed. Link may have expired.';
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+  }
+}
+
+// ============================================
+// AUTO LOGOUT — 2 HOURS INACTIVITY
+// ============================================
+const INACTIVITY_LIMIT = 2 * 60 * 60 * 1000;
+let inactivityTimer;
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  if (!currentClientId) return;
+  inactivityTimer = setTimeout(() => {
+    if (currentClientId) {
+      alert('You have been logged out due to 2 hours of inactivity.');
+      doLogout();
+    }
+  }, INACTIVITY_LIMIT);
+}
+['mousemove','keydown','click','scroll','touchstart'].forEach(evt => {
+  document.addEventListener(evt, () => { if (currentClientId) resetInactivityTimer(); }, true);
+});
+
+// ============================================
+// INIT
+// ============================================
+checkResetToken();
 const savedId = localStorage.getItem('emartit_client_id');
 const savedClient = localStorage.getItem('emartit_client');
-if (savedId && savedClient) { currentClientId=savedId; currentClient=JSON.parse(savedClient); showDashboard(); }
+if (savedId && savedClient) {
+  currentClientId = savedId;
+  currentClient = JSON.parse(savedClient);
+  resetInactivityTimer();
+  showDashboard();
+}
 </script>
 </body>
 </html>
