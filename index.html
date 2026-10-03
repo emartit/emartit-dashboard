@@ -119,6 +119,41 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
 .upgrade-btn-animate { animation: pulse 2s infinite; display: inline-block; }
 .sidebar-upgrade-animate { animation: glow 2s infinite; border-radius: 8px; }
 .countdown-animate { animation: countdown-pulse 1.5s infinite; }
+
+/* ===== Knowledge (documents + notes -> AI summary) ===== */
+.kn-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.kn-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#374151;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.kn-btn:hover{background:#f1f5f9}
+.kn-btn:disabled{opacity:.5;cursor:default}
+.kn-primary{background:#1a56a0;color:#fff;border-color:#1a56a0}
+.kn-primary:hover{background:#154a8a}
+.kn-del{color:#991b1b;border-color:#fecaca;background:#fff5f5}
+.kn-del:hover{background:#fee2e2}
+label.kn-btn input{display:none}
+.kn-hint{font-size:12px;color:#64748b;margin:4px 0 12px;line-height:1.5}
+.kn-item{border:1px solid #e5e7eb;border-radius:10px;margin-bottom:10px;background:#fff;overflow:hidden}
+.kn-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;flex-wrap:wrap}
+.kn-info{min-width:0;flex:1}
+.kn-title{font-size:13px;font-weight:700;color:#1a1a2e;word-break:break-word}
+.kn-meta{font-size:11px;color:#64748b;margin-top:4px}
+.kn-src{display:inline-block;background:#eef2ff;color:#3730a3;padding:2px 8px;border-radius:10px;font-weight:700;margin-right:6px}
+.kn-btns{display:flex;gap:6px;flex-wrap:wrap}
+.kn-body{padding:0 14px 14px}
+.kn-body textarea,.kn-note textarea,.kn-note input,#kn-sheet{width:100%;padding:10px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;font-family:Arial,sans-serif;line-height:1.5;outline:none;resize:vertical;background:#fff;color:#1a1a2e}
+.kn-body textarea:focus,.kn-note textarea:focus,.kn-note input:focus,#kn-sheet:focus{border-color:#1a56a0}
+.kn-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.kn-note{display:none;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:12px}
+.kn-note input{margin-bottom:8px}
+.kn-empty{color:#94a3b8;font-size:13px;text-align:center;padding:22px;border:1.5px dashed #e5e7eb;border-radius:10px;margin-bottom:10px;line-height:1.6}
+.kn-status{display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;line-height:1.5}
+.kn-status.busy{background:#eff6ff;color:#1e40af}
+.kn-status.ok{background:#dcfce7;color:#166534}
+.kn-status.err{background:#fee2e2;color:#991b1b}
+.kn-sheet-head{font-size:13px;font-weight:700;color:#1a56a0;margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb}
+.kn-read{white-space:pre-wrap;word-break:break-word;max-height:260px;overflow:auto;font-size:12.5px;line-height:1.55;background:#f8fafc;padding:12px 14px;border-top:1px solid #e5e7eb;color:#1a1a2e}
+.req-kn{padding:0 20px 16px}
+.req-kn .kn-sheet-head{margin-bottom:8px}
+.req-kn > .kn-read{border:1px solid #e5e7eb;border-radius:10px}
 </style>
 </head>
 <body>
@@ -184,6 +219,7 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
       <div class="nav-item active" onclick="showPage('overview', this)">📊 <span>Overview</span></div>
       <div class="nav-item" onclick="showPage('analytics', this)">📈 <span>Analytics</span></div>
       <div class="nav-item" onclick="showPage('settings', this)">⚙️ <span>Bot Settings</span></div>
+      <div class="nav-item" onclick="showPage('knowledge', this)">📚 <span>Knowledge</span></div>
       <div class="nav-item" onclick="showPage('branding', this)">🎨 <span>Branding</span></div>
       <div class="nav-item" onclick="showPage('preview', this)">💬 <span>Chat Preview</span></div>
       <div class="nav-item" onclick="showPage('embed', this)">🔗 <span>Embed Code</span></div>
@@ -300,6 +336,33 @@ body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
           <div class="field-group"><label>Custom Instructions</label><textarea id="s-custom" rows="3" placeholder="e.g. Always recommend booking in advance."></textarea></div>
           <button class="save-btn" onclick="saveSettings()">Save All Settings</button>
           <div class="success-msg hidden" id="settings-saved">✅ Settings saved successfully!</div>
+        </div>
+      </div>
+
+      <!-- KNOWLEDGE -->
+      <div id="page-knowledge" class="hidden">
+        <div class="page-title">Knowledge 📚</div>
+        <div class="page-sub">Everything your chatbot knows about your business. Upload documents or add notes, and your chatbot retrains automatically.</div>
+        <div class="card">
+          <h3>Your documents &amp; notes</h3>
+
+<div class="kn-status" id="kn-status"></div>
+<div class="kn-toolbar">
+  <label class="kn-btn kn-primary">📤 Upload document<input type="file" accept=".pdf,.docx,.txt" onchange="knUpload(this)"></label>
+  <button type="button" class="kn-btn kn-action" onclick="knShowNote(true)">✏️ Add a note</button>
+</div>
+<div class="kn-hint">PDF, DOCX or TXT, up to 5 MB. Only the text is kept; the file itself is deleted.</div>
+<div class="kn-note" id="kn-note-form">
+  <input type="text" id="kn-note-title" maxlength="200" placeholder="Title, e.g. Holiday opening hours">
+  <textarea id="kn-note-content" rows="5" maxlength="20000" placeholder="Write anything the chatbot should know. If a note disagrees with a document, the note wins."></textarea>
+  <div class="kn-row"><button type="button" class="kn-btn kn-primary kn-action" onclick="knSaveNote()">Save note</button><button type="button" class="kn-btn" onclick="knShowNote(false)">Cancel</button></div>
+</div>
+<div id="kn-list"></div>
+<div class="kn-sheet-head">🧠 What the chatbot knows (AI summary)</div>
+<div class="kn-hint">Built automatically from everything above. You can edit it, but it is rebuilt whenever a document or note changes, so for lasting corrections add a note instead.</div>
+<textarea id="kn-sheet" rows="12" placeholder="The summary appears here after a document or note is added."></textarea>
+<div class="kn-row"><button type="button" class="kn-btn kn-primary kn-action" onclick="knSaveSheet()">Save summary edits</button><button type="button" class="kn-btn kn-action" onclick="knRebuild()">↻ Rebuild summary</button></div>
+
         </div>
       </div>
 
@@ -514,6 +577,7 @@ let leadsData = [];
 let quickReplies = [];
 let clientAnalyticsChart = null;
 var customAvatarUrl = '';
+let clientToken = localStorage.getItem('emartit_token') || '';
 
 async function doLogin() {
   const email = document.getElementById('login-email').value;
@@ -530,6 +594,8 @@ async function doLogin() {
     localStorage.setItem('emartit_client_id', currentClientId);
     localStorage.setItem('emartit_client', JSON.stringify(currentClient));
     localStorage.setItem('emartit_login_email', email);
+    clientToken = data.token || '';
+    localStorage.setItem('emartit_token', clientToken);
     resetInactivityTimer();
     showDashboard();
   } catch(e) { errEl.textContent = e.message; errEl.classList.remove('hidden'); }
@@ -551,7 +617,7 @@ function showDashboard() {
 }
 
 function showPage(page, el) {
-  ['overview','analytics','settings','branding','preview','embed','leads','advanced'].forEach(p => {
+  ['overview','analytics','settings','knowledge','branding','preview','embed','leads','advanced'].forEach(p => {
     document.getElementById('page-' + p).classList.add('hidden');
   });
   document.getElementById('page-' + page).classList.remove('hidden');
@@ -562,6 +628,7 @@ function showPage(page, el) {
   if (page === 'leads') loadLeads();
   if (page === 'advanced') loadAdvancedSettings();
   if (page === 'analytics') loadClientAnalytics();
+  if (page === 'knowledge') knLoad();
 }
 
 async function loadClientAnalytics() {
@@ -1082,6 +1149,8 @@ function doLogout() {
   localStorage.removeItem('emartit_client_id');
   localStorage.removeItem('emartit_client');
   localStorage.removeItem('emartit_login_email');
+  localStorage.removeItem('emartit_token');
+  clientToken = '';
   currentClientId=null; currentClient=null;
   document.getElementById('dashboard-page').classList.add('hidden');
   document.getElementById('login-page').classList.remove('hidden');
@@ -1178,6 +1247,200 @@ function resetInactivityTimer() {
 ['mousemove','keydown','click','scroll','touchstart'].forEach(evt => {
   document.addEventListener(evt, () => { if (currentClientId) resetInactivityTimer(); }, true);
 });
+
+
+// ---- Knowledge: client endpoints (uses the login token) ----
+function knUrl(path) { return API + path + (path.indexOf("?") >= 0 ? "&" : "?") + "token=" + encodeURIComponent(clientToken); }
+const KN_PATHS = {
+  list: () => "/client/knowledge",
+  note: () => "/client/knowledge",
+  upload: () => "/client/knowledge/upload",
+  entry: id => "/client/knowledge/" + id,
+  sheet: () => "/client/knowledge-sheet",
+  rebuild: () => "/client/knowledge/rebuild"
+};
+function knOnAuthError() {
+  knStatus("");
+  document.getElementById("kn-list").innerHTML = '<div class="kn-empty">For your security, please sign in again to manage your knowledge.<br><br><button type="button" class="kn-btn kn-primary" onclick="doLogout()">Sign in again</button></div>';
+}
+
+// ============ KNOWLEDGE (documents + notes -> AI summary) ============
+let knEntries = [];
+let knBusy = false;
+const KN_SRC = { upload: "📄 Document", note: "✏️ Note", form: "📝 Request form" };
+const KN_MAX_BYTES = 5 * 1024 * 1024;
+
+function knEsc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function knStatus(msg, type) {
+  const el = document.getElementById("kn-status");
+  if (!el) return;
+  el.className = "kn-status" + (type ? " " + type : "");
+  el.textContent = msg || "";
+  el.style.display = msg ? "block" : "none";
+}
+
+async function knCall(method, path, body) {
+  const opts = { method: method };
+  if (body) { opts.headers = {"Content-Type": "application/json"}; opts.body = JSON.stringify(body); }
+  const res = await fetch(knUrl(path), opts);
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error(typeof data.detail === "string" ? data.detail : "Something went wrong (error " + res.status + "). Please try again.");
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+async function knRun(label, fn) {
+  if (knBusy) return;
+  knBusy = true;
+  knStatus("⏳ " + label + " The AI is retraining. This takes about 10 to 20 seconds…", "busy");
+  document.querySelectorAll(".kn-action").forEach(b => b.disabled = true);
+  try {
+    const data = await fn();
+    if (data) knRender(data);
+    knStatus("✅ Done. The chatbot is now using the updated knowledge.", "ok");
+  } catch (e) {
+    knStatus("❌ " + e.message, "err");
+    if (e.status === 401 && typeof knOnAuthError === "function") knOnAuthError();
+  } finally {
+    knBusy = false;
+    document.querySelectorAll(".kn-action").forEach(b => b.disabled = false);
+  }
+}
+
+async function knLoad() {
+  knEntries = [];
+  const list = document.getElementById("kn-list");
+  list.innerHTML = '<div class="kn-empty">Loading…</div>';
+  document.getElementById("kn-sheet").value = "";
+  knShowNote(false);
+  knStatus("");
+  try {
+    knRender(await knCall("GET", KN_PATHS.list()));
+  } catch (e) {
+    list.innerHTML = "";
+    knStatus("❌ " + e.message, "err");
+    if (e.status === 401 && typeof knOnAuthError === "function") knOnAuthError();
+  }
+}
+
+function knRender(data) {
+  if (Array.isArray(data.entries)) knEntries = data.entries;
+  if (typeof data.sheet === "string") document.getElementById("kn-sheet").value = data.sheet;
+  const list = document.getElementById("kn-list");
+  if (!knEntries.length) {
+    list.innerHTML = '<div class="kn-empty">Nothing here yet. Upload a document or add a note to train the chatbot.</div>';
+    return;
+  }
+  list.innerHTML = knEntries.map(e => {
+    const id = knEsc(e.id);
+    const date = e.created_at ? new Date(e.created_at).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}) : "";
+    const chars = (e.char_count || (e.content || "").length).toLocaleString();
+    return `<div class="kn-item">
+      <div class="kn-head">
+        <div class="kn-info">
+          <div class="kn-title">${knEsc(e.title || e.file_name || "Untitled")}</div>
+          <div class="kn-meta"><span class="kn-src">${KN_SRC[e.source] || knEsc(e.source)}</span>${date} · ${chars} characters</div>
+        </div>
+        <div class="kn-btns">
+          <button type="button" class="kn-btn" onclick="knToggle('${id}')">View / edit</button>
+          <button type="button" class="kn-btn kn-del kn-action" onclick="knDelete('${id}')">Delete</button>
+        </div>
+      </div>
+      <div class="kn-body" id="kn-body-${id}" style="display:none">
+        <textarea id="kn-text-${id}" rows="12"></textarea>
+        <div class="kn-row">
+          <button type="button" class="kn-btn kn-primary kn-action" onclick="knSaveEntry('${id}')">Save changes</button>
+          <button type="button" class="kn-btn" onclick="knToggle('${id}')">Close</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  knEntries.forEach(e => {
+    const t = document.getElementById("kn-text-" + e.id);
+    if (t) t.value = e.content || "";
+  });
+}
+
+function knToggle(id) {
+  const b = document.getElementById("kn-body-" + id);
+  if (b) b.style.display = b.style.display === "none" ? "block" : "none";
+}
+
+function knSaveEntry(id) {
+  const content = document.getElementById("kn-text-" + id).value.trim();
+  if (!content) { knStatus("❌ The text can't be empty. Use Delete to remove it instead.", "err"); return; }
+  knRun("Saving your changes.", async () => {
+    await knCall("PUT", KN_PATHS.entry(id), { content: content });
+    return await knCall("GET", KN_PATHS.list());
+  });
+}
+
+function knDelete(id) {
+  const e = knEntries.find(x => x.id === id);
+  const name = e ? (e.title || e.file_name || "this item") : "this item";
+  if (!confirm('Delete "' + name + '"? The chatbot will forget this information.')) return;
+  knRun("Deleting.", async () => {
+    await knCall("DELETE", KN_PATHS.entry(id));
+    return await knCall("GET", KN_PATHS.list());
+  });
+}
+
+function knShowNote(show) {
+  const f = document.getElementById("kn-note-form");
+  if (!f) return;
+  f.style.display = show ? "block" : "none";
+  if (show) document.getElementById("kn-note-title").focus();
+}
+
+function knSaveNote() {
+  const titleEl = document.getElementById("kn-note-title");
+  const contentEl = document.getElementById("kn-note-content");
+  const content = contentEl.value.trim();
+  if (!content) { knStatus("❌ Please write the note before saving.", "err"); return; }
+  knRun("Saving your note.", async () => {
+    const data = await knCall("POST", KN_PATHS.note(), { title: titleEl.value.trim() || "Note", content: content });
+    titleEl.value = ""; contentEl.value = "";
+    knShowNote(false);
+    return data;
+  });
+}
+
+function knUpload(input) {
+  const file = input.files[0];
+  input.value = "";
+  if (!file) return;
+  const ext = "." + file.name.split(".").pop().toLowerCase();
+  if (ext === ".doc") { knStatus("❌ Old .doc files can't be read. Open it in Word, choose Save As, and pick .docx or PDF.", "err"); return; }
+  if (![".pdf", ".docx", ".txt"].includes(ext)) { knStatus("❌ Please upload a PDF, DOCX or TXT file.", "err"); return; }
+  if (file.size > KN_MAX_BYTES) { knStatus("❌ This file is larger than 5 MB. Please upload a smaller file.", "err"); return; }
+  const reader = new FileReader();
+  reader.onerror = () => knStatus("❌ Your browser couldn't open this file. Please try again.", "err");
+  reader.onload = () => knRun("Reading " + file.name + ".", () =>
+    knCall("POST", KN_PATHS.upload(), { file_data: reader.result, file_name: file.name }));
+  reader.readAsDataURL(file);
+}
+
+function knSaveSheet() {
+  knRun("Saving the summary.", async () => {
+    await knCall("PUT", KN_PATHS.sheet(), { sheet: document.getElementById("kn-sheet").value });
+    return null;
+  });
+}
+
+function knRebuild() {
+  if (!confirm("Rebuild the summary from the documents and notes? Any manual edits to the summary will be replaced.")) return;
+  knRun("Rebuilding the summary.", async () => {
+    const d = await knCall("POST", KN_PATHS.rebuild());
+    return { sheet: d.sheet || "" };
+  });
+}
 
 // ============================================
 // INIT
