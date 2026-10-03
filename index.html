@@ -164,6 +164,7 @@ label.kn-btn input{display:none}
 .fmt a{color:#1a56a0;text-decoration:underline;word-break:break-word}
 .fmt strong{font-weight:700}
 .msg.bot .msg-bubble { text-align:left; line-height:1.5; }
+#preview-messages { height: 440px; position: relative; }
 .msg-bubble { overflow-wrap:anywhere; }
 </style>
 </head>
@@ -1107,7 +1108,9 @@ function addPreviewBubble(role, html) {
   else { bubble.innerHTML = html; }
   row.appendChild(bubble);
   messagesEl.appendChild(row);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  // Long bot reply: show it from its first line. Otherwise scroll to the bottom.
+  if (role === 'bot' && row.offsetHeight > messagesEl.clientHeight - 20) messagesEl.scrollTop = row.offsetTop - 10;
+  else messagesEl.scrollTop = messagesEl.scrollHeight;
   return row;
 }
 
