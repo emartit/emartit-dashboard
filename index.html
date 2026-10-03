@@ -166,6 +166,47 @@ label.kn-btn input{display:none}
 .msg.bot .msg-bubble { text-align:left; line-height:1.5; }
 #preview-messages { height: 440px; position: relative; }
 .msg-bubble { overflow-wrap:anywhere; }
+
+/* ===== Leads & Queries ===== */
+.inbox-badge { margin-left:auto; background:#dc2626; color:#fff; font-size:10px; font-weight:700; min-width:18px; height:18px; border-radius:9px; display:none; align-items:center; justify-content:center; padding:0 5px; }
+.inbox-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.inbox-tabs button { padding:7px 16px; border-radius:20px; border:1.5px solid #d1d5db; background:#fff; font-size:12px; font-weight:600; color:#64748b; cursor:pointer; }
+.inbox-tabs button.active { background:#1a569a; border-color:#1a569a; color:#fff; }
+.inbox-empty { text-align:center; padding:36px 20px; color:#94a3b8; font-size:13px; line-height:1.6; border:1.5px dashed #e5e7eb; border-radius:10px; }
+.iq-card { border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin-bottom:12px; background:#fff; }
+.iq-card.high { border-left:4px solid #dc2626; }
+.iq-head { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:flex-start; }
+.iq-title { font-size:14px; font-weight:700; color:#1a1a2e; line-height:1.4; }
+.iq-meta { font-size:11px; color:#64748b; margin-top:4px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.iq-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; }
+.t-unanswered { background:#fef3c7; color:#92400e; } .t-human { background:#e0e7ff; color:#3730a3; }
+.t-booking { background:#dcfce7; color:#166534; } .t-complaint { background:#fee2e2; color:#991b1b; }
+.t-other { background:#f1f5f9; color:#475569; } .t-urgent { background:#dc2626; color:#fff; }
+.src-chat { background:#e0f2fe; color:#0369a1; } .src-form { background:#f3e8ff; color:#6b21a8; } .src-offline_form { background:#f1f5f9; color:#475569; }
+.iq-contact { font-size:12px; color:#374151; margin-top:10px; display:flex; gap:14px; flex-wrap:wrap; }
+.iq-contact a { color:#1a569a; }
+.iq-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px; }
+.iq-actions select { padding:7px 10px; border:1.5px solid #d1d5db; border-radius:8px; font-size:12px; outline:none; background:#fff; }
+.iq-btn { padding:7px 14px; border-radius:8px; border:1px solid #d1d5db; background:#fff; color:#374151; font-size:12px; font-weight:600; cursor:pointer; }
+.iq-btn:hover { background:#f1f5f9; }
+.iq-btn.primary { background:#1a569a; color:#fff; border-color:#1a569a; }
+.iq-notes { width:100%; margin-top:10px; padding:9px 12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:12.5px; font-family:Arial,sans-serif; resize:vertical; outline:none; }
+.iq-notes:focus, .iq-actions select:focus { border-color:#1a569a; }
+.iq-saved { font-size:11px; color:#166534; }
+.chat-modal-box { background:#fff; border-radius:14px; width:640px; max-width:94vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+.chat-modal-head { padding:16px 20px; border-bottom:1px solid #e5e7eb; display:flex; justify-content:space-between; align-items:center; }
+.chat-modal-head h3 { font-size:15px; font-weight:700; }
+.chat-modal-body { padding:16px 20px; overflow-y:auto; background:#f9fbfd; flex:1; }
+.tr-msg { margin-bottom:10px; display:flex; flex-direction:column; }
+.tr-msg.user { align-items:flex-end; } .tr-msg.bot { align-items:flex-start; }
+.tr-bubble { max-width:82%; padding:9px 13px; border-radius:12px; font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+.tr-msg.user .tr-bubble { background:#1a569a; color:#fff; white-space:pre-wrap; }
+.tr-msg.bot .tr-bubble { background:#fff; border:1px solid #e5e7eb; }
+.tr-time { font-size:10px; color:#94a3b8; margin-top:3px; }
+.upsell-card { display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; background:linear-gradient(135deg,#eef2ff,#f0f9ff); border:1px solid #c7d2fe; border-radius:12px; padding:16px 20px; margin-bottom:20px; }
+.upsell-card b { font-size:14px; color:#1e1b4b; } .upsell-card p { font-size:12px; color:#475569; margin-top:4px; line-height:1.5; }
+.upsell-card a { background:#4338ca; color:#fff; padding:9px 16px; border-radius:8px; font-size:12px; font-weight:700; text-decoration:none; white-space:nowrap; }
+.upsell-card.active { background:#f0fdf4; border-color:#bbf7d0; } .upsell-card.active b { color:#166534; }
 </style>
 </head>
 <body>
@@ -235,7 +276,8 @@ label.kn-btn input{display:none}
       <div class="nav-item" onclick="showPage('branding', this)">🎨 <span>Branding</span></div>
       <div class="nav-item" onclick="showPage('preview', this)">💬 <span>Chat Preview</span></div>
       <div class="nav-item" onclick="showPage('embed', this)">🔗 <span>Embed Code</span></div>
-      <div class="nav-item" onclick="showPage('leads', this)">📋 <span>My Leads</span></div>
+      <div class="nav-item" onclick="showPage('leads', this)">📋 <span>My Leads</span><b class="inbox-badge" id="badge-leads"></b></div>
+      <div class="nav-item" onclick="showPage('queries', this)">📥 <span>Queries</span><b class="inbox-badge" id="badge-queries"></b></div>
       <div class="nav-item" onclick="showPage('advanced', this)">🔧 <span>Advanced</span></div>
       <div class="sidebar-bottom">
         <div id="sidebar-upgrade" style="display:none;padding:16px" class="sidebar-upgrade-animate">
@@ -459,19 +501,39 @@ label.kn-btn input{display:none}
       <!-- LEADS PAGE -->
       <div id="page-leads" class="hidden">
         <div class="page-title">My Leads 📋</div>
-        <div class="page-sub">Visitors who left their contact details through your chatbot</div>
+        <div class="page-sub">Visitors who left their contact details, from the chat or the lead form</div>
+        <div id="upsell-leads" class="upsell-card" style="display:none"></div>
         <div class="stats-grid">
           <div class="stat-card"><div class="stat-num" id="leads-total">—</div><div class="stat-lbl">Total Leads</div></div>
-          <div class="stat-card"><div class="stat-num" id="leads-today">—</div><div class="stat-lbl">Today</div></div>
+          <div class="stat-card"><div class="stat-num" id="leads-new">—</div><div class="stat-lbl">New</div></div>
           <div class="stat-card"><div class="stat-num" id="leads-week">—</div><div class="stat-lbl">This Week</div></div>
         </div>
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <h3 style="margin-bottom:0">All Leads</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+            <div class="inbox-tabs" id="lead-tabs" style="margin-bottom:0">
+              <button class="active" onclick="setLeadFilter('all', this)">All</button>
+              <button onclick="setLeadFilter('new', this)">New</button>
+              <button onclick="setLeadFilter('contacted', this)">Contacted</button>
+              <button onclick="setLeadFilter('closed', this)">Closed</button>
+            </div>
             <button onclick="exportLeads()" style="padding:8px 16px;background:#1a569a;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">⬇ Export CSV</button>
           </div>
-          <div id="leads-table-wrap"><div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">Loading leads...</div></div>
+          <div id="leads-list"><div class="inbox-empty">Loading leads…</div></div>
         </div>
+      </div>
+
+      <!-- QUERIES PAGE -->
+      <div id="page-queries" class="hidden">
+        <div class="page-title">Queries 📥</div>
+        <div class="page-sub">Chats where a visitor still needs you: unanswered questions, call-back or booking requests, complaints</div>
+        <div id="upsell-queries" class="upsell-card" style="display:none"></div>
+        <div class="inbox-tabs">
+          <button class="active" onclick="setQueryFilter('new', this)">🆕 New</button>
+          <button onclick="setQueryFilter('in_progress', this)">⏳ In progress</button>
+          <button onclick="setQueryFilter('done', this)">✅ Done</button>
+          <button onclick="setQueryFilter('all', this)">All</button>
+        </div>
+        <div id="queries-list"><div class="inbox-empty">Loading queries…</div></div>
       </div>
 
       <!-- ADVANCED PAGE -->
@@ -567,6 +629,14 @@ label.kn-btn input{display:none}
   </div>
 </div>
 
+<!-- CHAT TRANSCRIPT MODAL -->
+<div class="modal-overlay" id="chat-modal" onclick="if(event.target===this)closeChatModal()">
+  <div class="chat-modal-box">
+    <div class="chat-modal-head"><h3 id="chat-modal-title">Chat</h3><button onclick="closeChatModal()" style="background:#f1f5f9;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-weight:700;color:#64748b">✕</button></div>
+    <div class="chat-modal-body" id="chat-modal-body"></div>
+  </div>
+</div>
+
 <!-- PASSWORD CHANGE MODAL -->
 <div class="modal-overlay" id="password-modal">
   <div class="modal-box">
@@ -589,7 +659,6 @@ let currentClientId = null;
 let currentClient = null;
 let currentBranding = { headerColor: '#1a569a', bubbleColor: '#1a569a', avatar: 'robot', position: 'right', welcomeMessage: 'Hi! How can I help you today? 😊' };
 const AVATARS = { robot:'🤖', woman:'👩', man:'👨', star:'⭐', chat:'💬', heart:'❤️', lightning:'⚡', diamond:'💎', fire:'🔥', crown:'👑' };
-let leadsData = [];
 let quickReplies = [];
 let clientAnalyticsChart = null;
 var customAvatarUrl = '';
@@ -626,6 +695,7 @@ function showDashboard() {
   if (topbar) topbar.textContent = currentClient.business_name || '';
   loadSettings();
   loadUsage();
+  loadInboxCounts();
   fetch(API + '/clients/' + currentClientId + '/trial-status').then(r => r.json()).then(data => {
     const el = document.getElementById('sidebar-upgrade');
     if (el) el.style.display = (data.account_type === 'trial' || data.account_type === 'expired') ? 'block' : 'none';
@@ -633,7 +703,7 @@ function showDashboard() {
 }
 
 function showPage(page, el) {
-  ['overview','analytics','settings','knowledge','branding','preview','embed','leads','advanced'].forEach(p => {
+  ['overview','analytics','settings','knowledge','branding','preview','embed','leads','queries','advanced'].forEach(p => {
     document.getElementById('page-' + p).classList.add('hidden');
   });
   document.getElementById('page-' + page).classList.remove('hidden');
@@ -645,6 +715,7 @@ function showPage(page, el) {
   if (page === 'advanced') loadAdvancedSettings();
   if (page === 'analytics') loadClientAnalytics();
   if (page === 'knowledge') knLoad();
+  if (page === 'queries') loadQueries();
 }
 
 async function loadClientAnalytics() {
@@ -958,47 +1029,197 @@ async function loadUsage() {
   } catch(e) { console.log('Usage load error:', e); }
 }
 
-async function loadLeads() {
+// ============ LEADS & QUERIES ============
+let leadsData = [];
+let leadFilter = 'all';
+let queriesData = [];
+let queryFilter = 'new';
+const UPGRADE_LINK = 'https://www.emartit.com/subscribe';
+const Q_TYPES = { unanswered: '❓ Unanswered question', human: '🙋 Wants a person', booking: '📅 Booking / quote', complaint: '⚠️ Complaint', other: '📌 Follow-up' };
+const L_SOURCES = { chat: '💬 Chat', form: '📝 Lead form', offline_form: '🌙 After-hours form' };
+
+function inboxUrl(path) { return API + path + (path.indexOf('?') >= 0 ? '&' : '?') + 'token=' + encodeURIComponent(clientToken); }
+async function inboxCall(method, path, body) {
+  const opts = { method: method };
+  if (body) { opts.headers = {'Content-Type': 'application/json'}; opts.body = JSON.stringify(body); }
+  const res = await fetch(inboxUrl(path), opts);
+  let data = {}; try { data = await res.json(); } catch (e) {}
+  if (!res.ok) { const err = new Error(typeof data.detail === 'string' ? data.detail : 'Something went wrong. Please try again.'); err.status = res.status; throw err; }
+  return data;
+}
+function inboxAuthMessage(el) {
+  el.innerHTML = '<div class="inbox-empty">For your security, please sign in again to see this page.<br><br><button class="iq-btn primary" onclick="doLogout()">Sign in again</button></div>';
+}
+function fmtDate(s) { return s ? new Date(s).toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''; }
+function contactLine(name, email, phone) {
+  const parts = [];
+  if (name) parts.push('👤 ' + fmtEsc(name));
+  if (email) parts.push('✉️ <a href="mailto:' + fmtEsc(email) + '">' + fmtEsc(email) + '</a>');
+  if (phone) parts.push('📞 <a href="tel:' + fmtEsc(phone.replace(/[^\d+]/g, '')) + '">' + fmtEsc(phone) + '</a>');
+  return parts.length ? '<div class="iq-contact">' + parts.map(p => '<span>' + p + '</span>').join('') + '</div>' : '<div class="iq-contact" style="color:#94a3b8">No contact details given — check the chat.</div>';
+}
+function setBadge(id, n) { const b = document.getElementById(id); if (!b) return; b.textContent = n; b.style.display = n > 0 ? 'inline-flex' : 'none'; }
+async function loadInboxCounts() {
+  try { const d = await inboxCall('GET', '/client/inbox-counts'); setBadge('badge-leads', d.new_leads); setBadge('badge-queries', d.new_queries); } catch (e) {}
+}
+async function renderUpsell(id) {
+  const el = document.getElementById(id); if (!el) return;
   try {
-    const res = await fetch(API + '/leads/' + currentClientId);
-    const data = await res.json();
-    leadsData = data.leads || [];
-    renderLeadsTable();
-    updateLeadsStats();
-  } catch(e) {
-    document.getElementById('leads-table-wrap').innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8">Enable Lead Capture in Advanced Settings.</div>';
-    document.getElementById('leads-total').textContent = '0';
-    document.getElementById('leads-today').textContent = '0';
-    document.getElementById('leads-week').textContent = '0';
+    const res = await fetch(API + '/clients/' + currentClientId + '/settings');
+    const s = (await res.json()).settings || {};
+    if (s.alerts_enabled) {
+      el.className = 'upsell-card active';
+      el.innerHTML = '<div><b>🔔 Email Alerts are active</b><p>New leads, pending queries and chat transcripts are emailed to you automatically.</p></div>';
+    } else {
+      el.className = 'upsell-card';
+      el.innerHTML = '<div><b>🔔 Get every lead and query in your inbox</b><p>Upgrade to Email Alerts: new leads, pending queries and full chat transcripts emailed to you or your team — no need to check the dashboard.</p></div><a href="' + UPGRADE_LINK + '" target="_blank" rel="noopener">Upgrade →</a>';
+    }
+    el.style.display = 'flex';
+  } catch (e) { el.style.display = 'none'; }
+}
+
+// ---- My Leads ----
+async function loadLeads() {
+  const list = document.getElementById('leads-list');
+  list.innerHTML = '<div class="inbox-empty">Loading leads…</div>';
+  renderUpsell('upsell-leads');
+  try {
+    leadsData = (await inboxCall('GET', '/client/leads')).leads || [];
+    updateLeadsStats(); renderLeads(); loadInboxCounts();
+  } catch (e) {
+    if (e.status === 401) inboxAuthMessage(list); else list.innerHTML = '<div class="inbox-empty">❌ ' + fmtEsc(e.message) + '</div>';
   }
 }
-
 function updateLeadsStats() {
-  document.getElementById('leads-total').textContent = leadsData.length;
-  const today = new Date().toDateString();
   const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
-  document.getElementById('leads-today').textContent = leadsData.filter(l => new Date(l.created_at).toDateString() === today).length;
+  document.getElementById('leads-total').textContent = leadsData.length;
+  document.getElementById('leads-new').textContent = leadsData.filter(l => (l.status || 'new') === 'new').length;
   document.getElementById('leads-week').textContent = leadsData.filter(l => new Date(l.created_at) >= weekAgo).length;
 }
-
-function renderLeadsTable() {
-  const wrap = document.getElementById('leads-table-wrap');
-  if (leadsData.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">No leads yet. Enable Lead Capture in Advanced Settings.</div>'; return; }
-  wrap.innerHTML = `<table class="leads-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Date</th></tr></thead><tbody>${leadsData.map(l => `
-    <tr><td><strong>${fmtEsc(l.visitor_name)||'—'}</strong></td><td>${fmtEsc(l.visitor_email)||'—'}</td><td>${fmtEsc(l.visitor_phone)||'—'}</td>
-    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${fmtEsc(l.message)||'—'}</td>
-    <td style="white-space:nowrap;color:#64748b;font-size:12px">${new Date(l.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table>`;
+function setLeadFilter(f, btn) {
+  leadFilter = f;
+  document.querySelectorAll('#lead-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); renderLeads();
 }
-
+function renderLeads() {
+  const list = document.getElementById('leads-list');
+  const rows = leadsData.filter(l => leadFilter === 'all' || (l.status || 'new') === leadFilter);
+  if (!rows.length) {
+    list.innerHTML = '<div class="inbox-empty">' + (leadsData.length ? 'No leads in this view.' : 'No leads yet. When a visitor shares their name, email or phone in the chat (or fills in the lead form), they appear here automatically — usually within 15 minutes after the chat ends.') + '</div>';
+    return;
+  }
+  list.innerHTML = rows.map(l => {
+    const id = fmtEsc(l.id), st = l.status || 'new', src = l.source || 'form';
+    const title = l.summary || l.message || 'New lead';
+    return `<div class="iq-card">
+      <div class="iq-head"><div>
+        <div class="iq-title">${fmtEsc(l.visitor_name || l.visitor_email || l.visitor_phone || 'Visitor')}${l.business_name ? ' · ' + fmtEsc(l.business_name) : ''}</div>
+        <div class="iq-meta"><span class="iq-tag src-${fmtEsc(src)}">${L_SOURCES[src] || fmtEsc(src)}</span><span>${fmtDate(l.created_at)}</span></div>
+      </div></div>
+      <div style="font-size:13px;color:#374151;margin-top:8px;line-height:1.5">${fmtEsc(title)}</div>
+      ${contactLine('', l.visitor_email, l.visitor_phone)}
+      <div class="iq-actions">
+        <select onchange="updateLead('${id}', {status: this.value}, this)">
+          <option value="new" ${st==='new'?'selected':''}>🆕 New</option>
+          <option value="contacted" ${st==='contacted'?'selected':''}>📞 Contacted</option>
+          <option value="closed" ${st==='closed'?'selected':''}>✅ Closed</option>
+        </select>
+        ${l.session_id ? `<button class="iq-btn" onclick="openChat('${fmtEsc(l.session_id)}', 'Chat with ${fmtEsc((l.visitor_name || 'visitor').replace(/'/g, ''))}')">💬 View chat</button>` : ''}
+        <span class="iq-saved" id="saved-${id}"></span>
+      </div>
+      <textarea class="iq-notes" rows="2" placeholder="Your notes (e.g. called on Monday, sent quote)…" onchange="updateLead('${id}', {notes: this.value}, this)">${fmtEsc(l.notes || '')}</textarea>
+    </div>`;
+  }).join('');
+}
+async function updateLead(id, changes, el) {
+  try {
+    await inboxCall('PUT', '/client/leads/' + id, changes);
+    const l = leadsData.find(x => x.id === id); if (l) Object.assign(l, changes);
+    const s = document.getElementById('saved-' + id); if (s) { s.textContent = '✓ Saved'; setTimeout(() => s.textContent = '', 2000); }
+    updateLeadsStats(); loadInboxCounts();
+    if (changes.status && leadFilter !== 'all') renderLeads();
+  } catch (e) { alert(e.message); }
+}
 function exportLeads() {
-  if (leadsData.length === 0) { alert('No leads to export yet.'); return; }
-  let csv = 'Name,Email,Phone,Message,Date\n';
-  leadsData.forEach(l => { csv += `"${l.visitor_name||''}","${l.visitor_email||''}","${l.visitor_phone||''}","${l.message||''}","${new Date(l.created_at).toLocaleString()}"\n`; });
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='leads.csv'; a.click();
-  URL.revokeObjectURL(url);
+  if (!leadsData.length) { alert('No leads to export yet.'); return; }
+  const q = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+  let csv = 'Name,Email,Phone,Business,What they want,Source,Status,Notes,Date\n';
+  leadsData.forEach(l => { csv += [l.visitor_name, l.visitor_email, l.visitor_phone, l.business_name, l.summary || l.message, l.source, l.status || 'new', l.notes, new Date(l.created_at).toLocaleString()].map(q).join(',') + '\n'; });
+  const blob = new Blob([csv], {type: 'text/csv'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'leads.csv'; a.click(); URL.revokeObjectURL(url);
 }
+
+// ---- Queries ----
+async function loadQueries() {
+  const list = document.getElementById('queries-list');
+  list.innerHTML = '<div class="inbox-empty">Loading queries…</div>';
+  renderUpsell('upsell-queries');
+  try {
+    queriesData = (await inboxCall('GET', '/client/queries')).queries || [];
+    renderQueries(); loadInboxCounts();
+  } catch (e) {
+    if (e.status === 401) inboxAuthMessage(list); else list.innerHTML = '<div class="inbox-empty">❌ ' + fmtEsc(e.message) + '</div>';
+  }
+}
+function setQueryFilter(f, btn) {
+  queryFilter = f;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); renderQueries();
+}
+function renderQueries() {
+  const list = document.getElementById('queries-list');
+  const rows = queriesData.filter(q => queryFilter === 'all' || (q.status || 'new') === queryFilter);
+  if (!rows.length) {
+    list.innerHTML = '<div class="inbox-empty">' + (queriesData.length ? 'Nothing here. 🎉' : 'No queries yet. When a visitor asks something your chatbot can\'t answer, wants to talk to a person, wants to book, or complains, it appears here — usually within 15 minutes after the chat ends.') + '</div>';
+    return;
+  }
+  list.innerHTML = rows.map(q => {
+    const id = fmtEsc(q.id), st = q.status || 'new', type = q.type || 'other';
+    return `<div class="iq-card ${q.urgency === 'high' ? 'high' : ''}">
+      <div class="iq-head"><div>
+        <div class="iq-meta" style="margin-top:0;margin-bottom:6px"><span class="iq-tag t-${fmtEsc(type)}">${Q_TYPES[type] || fmtEsc(type)}</span>${q.urgency === 'high' ? '<span class="iq-tag t-urgent">Urgent</span>' : ''}<span>${fmtDate(q.created_at)}</span></div>
+        <div class="iq-title">${fmtEsc(q.summary || 'Open the chat to see what the visitor needs.')}</div>
+      </div></div>
+      ${contactLine(q.visitor_name, q.visitor_email, q.visitor_phone)}
+      <div class="iq-actions">
+        <select onchange="updateQuery('${id}', {status: this.value})">
+          <option value="new" ${st==='new'?'selected':''}>🆕 New</option>
+          <option value="in_progress" ${st==='in_progress'?'selected':''}>⏳ In progress</option>
+          <option value="done" ${st==='done'?'selected':''}>✅ Done</option>
+        </select>
+        ${q.session_id ? `<button class="iq-btn" onclick="openChat('${fmtEsc(q.session_id)}', 'Chat')">💬 View chat</button>` : ''}
+        <span class="iq-saved" id="saved-${id}"></span>
+      </div>
+      <textarea class="iq-notes" rows="2" placeholder="Your notes…" onchange="updateQuery('${id}', {notes: this.value})">${fmtEsc(q.notes || '')}</textarea>
+    </div>`;
+  }).join('');
+}
+async function updateQuery(id, changes) {
+  try {
+    await inboxCall('PUT', '/client/queries/' + id, changes);
+    const q = queriesData.find(x => x.id === id); if (q) Object.assign(q, changes);
+    const s = document.getElementById('saved-' + id); if (s) { s.textContent = '✓ Saved'; setTimeout(() => s.textContent = '', 2000); }
+    loadInboxCounts();
+    if (changes.status && queryFilter !== 'all') setTimeout(renderQueries, 600);
+  } catch (e) { alert(e.message); }
+}
+
+// ---- Chat transcript ----
+async function openChat(sessionId, title) {
+  document.getElementById('chat-modal-title').textContent = title || 'Chat';
+  const body = document.getElementById('chat-modal-body');
+  body.innerHTML = '<div class="inbox-empty">Loading chat…</div>';
+  document.getElementById('chat-modal').classList.add('open');
+  try {
+    const d = await inboxCall('GET', '/client/chats/' + encodeURIComponent(sessionId));
+    const msgs = d.messages || [];
+    body.innerHTML = msgs.length ? msgs.map(m => {
+      const user = m.role === 'user';
+      return `<div class="tr-msg ${user ? 'user' : 'bot'}"><div class="tr-bubble ${user ? '' : 'fmt'}">${user ? fmtEsc(m.message) : fmtReply(m.message)}</div><div class="tr-time">${user ? 'Visitor' : 'Bot'} · ${fmtDate(m.created_at)}</div></div>`;
+    }).join('') : '<div class="inbox-empty">No messages were saved for this chat (for example, the visitor only filled in the form).</div>';
+  } catch (e) { body.innerHTML = '<div class="inbox-empty">❌ ' + fmtEsc(e.message) + '</div>'; }
+}
+function closeChatModal() { document.getElementById('chat-modal').classList.remove('open'); }
 
 function addQuickReply() {
   if (quickReplies.length >= 5) { alert('Maximum 5 quick reply buttons allowed.'); return; }
