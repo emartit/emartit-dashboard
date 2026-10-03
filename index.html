@@ -154,6 +154,17 @@ label.kn-btn input{display:none}
 .req-kn{padding:0 20px 16px}
 .req-kn .kn-sheet-head{margin-bottom:8px}
 .req-kn > .kn-read{border:1px solid #e5e7eb;border-radius:10px}
+
+/* formatted chat replies */
+.fmt p{margin:0 0 8px}
+.fmt p:last-child{margin-bottom:0}
+.fmt ul,.fmt ol{margin:4px 0 8px 20px;padding:0}
+.fmt ul:last-child,.fmt ol:last-child{margin-bottom:0}
+.fmt li{margin:3px 0}
+.fmt a{color:#1a56a0;text-decoration:underline;word-break:break-word}
+.fmt strong{font-weight:700}
+.msg.bot .msg-bubble { text-align:left; line-height:1.5; }
+.msg-bubble { overflow-wrap:anywhere; }
 </style>
 </head>
 <body>
@@ -436,6 +447,10 @@ label.kn-btn input{display:none}
             <div class="chat-header-preview" id="preview-header" style="background:#1a569a"><span id="preview-avatar">🤖</span><span id="preview-bot-name">Your Assistant</span></div>
             <div class="chat-messages" id="preview-messages"><div class="msg bot"><div class="msg-bubble">Hi! How can I help you today? 😊</div></div></div>
             <div class="chat-input-row"><input type="text" id="preview-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendPreview()"><button id="preview-send-btn" onclick="sendPreview()" style="background:#1a569a">Send</button></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <div style="font-size:12px;color:#94a3b8">Test chats here are not counted in your usage or trial.</div>
+            <button class="copy-btn" onclick="resetPreview()">↻ Start a new test chat</button>
           </div>
         </div>
       </div>
@@ -969,8 +984,8 @@ function renderLeadsTable() {
   const wrap = document.getElementById('leads-table-wrap');
   if (leadsData.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px">No leads yet. Enable Lead Capture in Advanced Settings.</div>'; return; }
   wrap.innerHTML = `<table class="leads-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Date</th></tr></thead><tbody>${leadsData.map(l => `
-    <tr><td><strong>${l.visitor_name||'—'}</strong></td><td>${l.visitor_email||'—'}</td><td>${l.visitor_phone||'—'}</td>
-    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.message||'—'}</td>
+    <tr><td><strong>${fmtEsc(l.visitor_name)||'—'}</strong></td><td>${fmtEsc(l.visitor_email)||'—'}</td><td>${fmtEsc(l.visitor_phone)||'—'}</td>
+    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${fmtEsc(l.message)||'—'}</td>
     <td style="white-space:nowrap;color:#64748b;font-size:12px">${new Date(l.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')}</tbody></table>`;
 }
 
@@ -1078,25 +1093,97 @@ function playVideo() {
   document.getElementById('video-iframe').src = 'https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1';
 }
 
+let previewHistory = [];
+let previewSession = null;
+let previewBusy = false;
+
+function addPreviewBubble(role, html) {
+  const messagesEl = document.getElementById('preview-messages');
+  const row = document.createElement('div');
+  row.className = 'msg ' + role;
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble' + (role === 'bot' ? ' fmt' : '');
+  if (role === 'user') { bubble.style.background = currentBranding.bubbleColor; bubble.textContent = html; }
+  else { bubble.innerHTML = html; }
+  row.appendChild(bubble);
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
+}
+
+function resetPreview() {
+  previewHistory = [];
+  previewSession = null;
+  document.getElementById('preview-messages').innerHTML = '';
+  addPreviewBubble('bot', fmtReply(currentBranding.welcomeMessage || 'Hi! How can I help you today?'));
+}
+
 async function sendPreview() {
   const input = document.getElementById('preview-input');
   const msg = input.value.trim();
-  if (!msg) return;
+  if (!msg || previewBusy) return;
+  previewBusy = true;
   input.value = '';
-  const messagesEl = document.getElementById('preview-messages');
-  messagesEl.innerHTML += `<div class="msg user"><div class="msg-bubble" style="background:${currentBranding.bubbleColor}">${msg}</div></div>`;
-  messagesEl.innerHTML += `<div class="msg bot" id="typing"><div class="msg-bubble">Typing...</div></div>`;
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  addPreviewBubble('user', msg);
+  const typing = addPreviewBubble('bot', '<p>Typing…</p>');
   try {
-    const res = await fetch(API+'/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({client_id:currentClientId, message:msg, conversation_history:[]}) });
+    const res = await fetch(API + '/chat', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        client_id: currentClientId,
+        message: msg,
+        conversation_history: previewHistory,
+        session_id: previewSession,
+        preview_token: clientToken
+      })
+    });
     const data = await res.json();
-    document.getElementById('typing').remove();
-    messagesEl.innerHTML += `<div class="msg bot"><div class="msg-bubble">${data.reply}</div></div>`;
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    typing.remove();
+    const reply = data.reply || (typeof data.detail === 'string' ? data.detail : 'Sorry, something went wrong.');
+    if (data.session_id) previewSession = data.session_id;
+    if (res.ok && data.success) {
+      previewHistory.push({role: 'user', content: msg}, {role: 'assistant', content: reply});
+      previewHistory = previewHistory.slice(-20);
+    }
+    addPreviewBubble('bot', fmtReply(reply));
   } catch(e) {
-    document.getElementById('typing').remove();
-    messagesEl.innerHTML += `<div class="msg bot"><div class="msg-bubble">Sorry, something went wrong.</div></div>`;
+    typing.remove();
+    addPreviewBubble('bot', '<p>Sorry, something went wrong. Please try again.</p>');
+  } finally {
+    previewBusy = false;
   }
+}
+
+// ============ CHAT REPLY FORMATTING (safe: escapes everything first) ============
+function fmtEsc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtInline(s) {
+  let h = fmtEsc(s);
+  h = h.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  h = h.replace(/__(.+?)__/g, "<strong>$1</strong>");
+  h = h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  h = h.replace(/(^|[\s(])(https?:\/\/[^\s<]+[^\s<.,!?;:)])/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  h = h.replace(/(^|[\s(])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g, '$1<a href="mailto:$2">$2</a>');
+  return h;
+}
+function fmtReply(text) {
+  const lines = String(text == null ? "" : text).replace(/\r/g, "").split("\n");
+  let html = "", para = [], list = null;
+  const flushPara = () => { if (para.length) { html += "<p>" + para.join("<br>") + "</p>"; para = []; } };
+  const flushList = () => { if (list) { html += "<" + list.type + ">" + list.items.map(i => "<li>" + i + "</li>").join("") + "</" + list.type + ">"; list = null; } };
+  for (const raw of lines) {
+    const line = raw.trim();
+    let m;
+    if (!line) { flushPara(); flushList(); continue; }
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) { flushPara(); flushList(); continue; }
+    if ((m = line.match(/^#{1,6}\s+(.*)$/))) { flushPara(); flushList(); html += "<p><strong>" + fmtInline(m[1].replace(/\*\*/g, "")) + "</strong></p>"; continue; }
+    if ((m = line.match(/^[-•*✅📌]\s+(.*)$/))) { flushPara(); if (!list || list.type !== "ul") { flushList(); list = { type: "ul", items: [] }; } list.items.push(fmtInline(m[1])); continue; }
+    if ((m = line.match(/^\d+[.)]\s+(.*)$/))) { flushPara(); if (!list || list.type !== "ol") { flushList(); list = { type: "ol", items: [] }; } list.items.push(fmtInline(m[1])); continue; }
+    flushList(); para.push(fmtInline(line));
+  }
+  flushPara(); flushList();
+  return html || "<p></p>";
 }
 
 function showEmbed() {
