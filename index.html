@@ -599,6 +599,38 @@ label.kn-btn input{display:none}
             <div class="hours-row" id="hours-sunday"><span style="font-size:13px;font-weight:600">Sunday</span><input type="time" value="09:00"><input type="time" value="18:00"><input type="checkbox"></div>
           </div>
         </div>
+        <div class="card">
+          <h3>🎤 Voice &amp; Reminders</h3>
+          <p style="font-size:13px;color:#555;margin-bottom:16px">Make your chatbot easier to use. All of these are free.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Voice typing 🎤</div><div style="font-size:12px;color:#64748b;margin-top:2px">Visitors can tap the mic and speak instead of typing (Chrome, Edge, Safari)</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="voice-input-enabled" checked><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
+          </div>
+          <div class="field-group">
+            <label>Voice language</label>
+            <select id="voice-language">
+              <option value="en-US">English (US)</option>
+              <option value="en-GB">English (UK)</option>
+              <option value="bn-BD">Bangla (বাংলা)</option>
+              <option value="hi-IN">Hindi</option>
+              <option value="ar-SA">Arabic</option>
+              <option value="es-ES">Spanish</option>
+              <option value="fr-FR">French</option>
+              <option value="de-DE">German</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Read replies aloud 🔊</div><div style="font-size:12px;color:#64748b;margin-top:2px">Shows a small "Listen" link under each reply</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="read-aloud-enabled" checked><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Friendly reminders ⏰</div><div style="font-size:12px;color:#64748b;margin-top:2px">If a visitor stops replying: a check-in after 5 minutes, and a polite goodbye after 10 minutes. Only while the chat is open, never more than twice.</div></div>
+            <label class="toggle-wrap"><input type="checkbox" id="idle-reminders-enabled" checked><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
+          </div>
+          <div class="field-group"><label>Reminder after 5 minutes (leave empty for the default)</label><textarea id="idle-message-1" rows="2" maxlength="300" placeholder="Just checking in 😊 Do you have any other questions? I'm happy to help."></textarea></div>
+          <div class="field-group"><label>Goodbye after 10 minutes (leave empty for the default)</label><textarea id="idle-message-2" rows="2" maxlength="300" placeholder="Thanks for chatting with us! Feel free to come back anytime: just type here and tell me how I can help."></textarea>
+            <div style="font-size:11px;color:#94a3b8;margin-top:4px">If the visitor hasn't left contact details, the goodbye also invites them to leave their name and email.</div></div>
+        </div>
         <button class="save-btn" onclick="saveAdvancedSettings()">Save All Advanced Settings</button>
         <div class="success-msg hidden" id="advanced-saved" style="margin-top:8px">✅ Advanced settings saved!</div>
       </div>
@@ -1287,6 +1319,12 @@ async function loadAdvancedSettings() {
     document.getElementById('offline-message').value = s.offline_message||'We are currently closed. Please leave your details and we will get back to you!';
     if (s.timezone) document.getElementById('offline-timezone').value = s.timezone;
     if (s.business_hours) setBusinessHours(s.business_hours);
+    document.getElementById('voice-input-enabled').checked = s.voice_input_enabled !== false;
+    document.getElementById('voice-language').value = s.voice_language || 'en-US';
+    document.getElementById('read-aloud-enabled').checked = s.read_aloud_enabled !== false;
+    document.getElementById('idle-reminders-enabled').checked = s.idle_reminders_enabled !== false;
+    document.getElementById('idle-message-1').value = s.idle_message_1 || '';
+    document.getElementById('idle-message-2').value = s.idle_message_2 || '';
   } catch(e) { console.log('Advanced settings load error:', e); }
 }
 
@@ -1308,7 +1346,21 @@ async function saveAdvancedSettings() {
         quick_replies: cleanedReplies
       })
     });
-    if (res.ok) { document.getElementById('advanced-saved').classList.remove('hidden'); setTimeout(()=>document.getElementById('advanced-saved').classList.add('hidden'),3000); }
+    const res2 = await fetch(API + '/clients/settings?token=' + encodeURIComponent(clientToken), {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        client_id: currentClientId,
+        voice_input_enabled: document.getElementById('voice-input-enabled').checked,
+        voice_language: document.getElementById('voice-language').value,
+        read_aloud_enabled: document.getElementById('read-aloud-enabled').checked,
+        idle_reminders_enabled: document.getElementById('idle-reminders-enabled').checked,
+        idle_message_1: document.getElementById('idle-message-1').value.trim(),
+        idle_message_2: document.getElementById('idle-message-2').value.trim()
+      })
+    });
+    if (res.status === 401 || res2.status === 401) { alert('Your session has expired. Please sign in again.'); doLogout(); return; }
+    if (res.ok && res2.ok) { document.getElementById('advanced-saved').classList.remove('hidden'); setTimeout(()=>document.getElementById('advanced-saved').classList.add('hidden'),3000); }
+    else { alert('Some settings could not be saved. Please try again.'); }
   } catch(e) { console.log('Save advanced error:', e); }
 }
 
