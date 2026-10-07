@@ -608,7 +608,7 @@ label.kn-btn input{display:none}
           </div>
           <div class="field-group">
             <label>Voice language</label>
-            <select id="voice-language">
+            <select id="voice-language" onchange="updateReadAloudNote()">
               <option value="en-US">English (US)</option>
               <option value="en-GB">English (UK)</option>
               <option value="bn-BD">Bangla (বাংলা)</option>
@@ -620,7 +620,7 @@ label.kn-btn input{display:none}
             </select>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
-            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Read replies aloud 🔊</div><div style="font-size:12px;color:#64748b;margin-top:2px">Shows a small "Listen" link under each reply</div></div>
+            <div><div style="font-size:14px;font-weight:700;color:#1a1a2e">Read replies aloud 🔊</div><div style="font-size:12px;color:#64748b;margin-top:2px">Shows a small "Listen" link under each reply. Available when the voice language is English (US or UK).</div><div id="read-aloud-note" style="display:none;font-size:12px;color:#92400e;margin-top:4px">Hidden for this language: built-in browser voices don't pronounce it well.</div></div>
             <label class="toggle-wrap"><input type="checkbox" id="read-aloud-enabled" checked><span class="toggle-bg"></span><span class="toggle-dot"></span></label>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:14px;background:#f8fafc;border-radius:10px;border:1px solid #e5e7eb">
@@ -1325,7 +1325,13 @@ async function loadAdvancedSettings() {
     document.getElementById('idle-reminders-enabled').checked = s.idle_reminders_enabled !== false;
     document.getElementById('idle-message-1').value = s.idle_message_1 || '';
     document.getElementById('idle-message-2').value = s.idle_message_2 || '';
+    updateReadAloudNote();
   } catch(e) { console.log('Advanced settings load error:', e); }
+}
+
+function updateReadAloudNote() {
+  const english = /^en(-|$)/i.test(document.getElementById('voice-language').value || 'en-US');
+  document.getElementById('read-aloud-note').style.display = english ? 'none' : 'block';
 }
 
 async function saveAdvancedSettings() {
